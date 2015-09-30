@@ -36,6 +36,12 @@
     <ClInclude Include="ArrayGraphReader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="ArrayHashCountReader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ArrayHashReader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -48,6 +54,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="ArrayGraphReader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ArrayHashCountReader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ArrayHashReader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -18,17 +18,17 @@ public:
     uint32 len;
 };
 
-class CountHash {
+class HashCount {
 public:
     uint64 hash;
     uint32 count;
 
-    bool operator<(const CountHash& a) const
+    bool operator<(const HashCount& a) const
     {
         return hash < a.hash;
     }
 
-    bool operator==(const CountHash& a) const
+    bool operator==(const HashCount& a) const
     {
         return hash == a.hash;
     }

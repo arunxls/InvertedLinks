@@ -142,6 +142,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ArrayGraphReader.h" />
+    <ClInclude Include="ArrayHashCountReader.h" />
+    <ClInclude Include="ArrayHashReader.h" />
     <ClInclude Include="FileReader.h" />
     <ClInclude Include="file_manager.h" />
     <ClInclude Include="include_types.h" />
@@ -150,6 +152,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ArrayGraphReader.cpp" />
+    <ClCompile Include="ArrayHashCountReader.cpp" />
+    <ClCompile Include="ArrayHashReader.cpp" />
     <ClCompile Include="FileReader.cpp" />
     <ClCompile Include="InvertedLinks.cpp" />
     <ClCompile Include="stdafx.cpp">
