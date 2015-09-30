@@ -1,5 +1,6 @@
 #pragma once
 #include "include_types.h"
+#include "FileReader.h"
 
 class ArrayGraphReader
 {
@@ -10,7 +11,9 @@ public:
     HeaderGraph* start_offset;
     HeaderGraph* end_offset;
 
-    ArrayGraphReader(void*, void*);
+    FileReader* FH;
+
+    ArrayGraphReader(void*, void*, FileReader*);
     ~ArrayGraphReader();
 };
 

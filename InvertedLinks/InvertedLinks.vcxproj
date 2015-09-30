@@ -145,6 +145,7 @@
     <ClInclude Include="ArrayHashCountReader.h" />
     <ClInclude Include="ArrayHashReader.h" />
     <ClInclude Include="FileReader.h" />
+    <ClInclude Include="FileWriter.h" />
     <ClInclude Include="file_manager.h" />
     <ClInclude Include="include_types.h" />
     <ClInclude Include="InvertedLinks.h" />
@@ -157,6 +158,7 @@
     <ClCompile Include="ArrayHashCountReader.cpp" />
     <ClCompile Include="ArrayHashReader.cpp" />
     <ClCompile Include="FileReader.cpp" />
+    <ClCompile Include="FileWriter.cpp" />
     <ClCompile Include="InvertedLinks.cpp" />
     <ClCompile Include="SplitHash.cpp" />
     <ClCompile Include="stdafx.cpp">
