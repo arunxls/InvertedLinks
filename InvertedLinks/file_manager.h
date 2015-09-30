@@ -2,10 +2,14 @@
 
 #include <windows.h>
 #include <tchar.h>
-#include <stdio.h>
+#include <cstdio>
 #include <strsafe.h>
+#include <csignal>
+#include <cstdlib>
+#include "include_types.h"
 
 DWORD g_BytesTransferred = 0;
+void DisplayError(LPTSTR lpszFunction);
 
 VOID CALLBACK FileIOCompletionRoutine
 (
@@ -19,13 +23,30 @@ VOID CALLBACK FileIOCompletionRoutine
 }
 
 HANDLE getFileHandle(char *filename) {
-    return CreateFile(filename,               // file to open
+    HANDLE hFile = CreateFile(filename,               // file to open
         GENERIC_READ,          // open for reading
         FILE_SHARE_READ,       // share for reading
         NULL,                  // default security
         OPEN_EXISTING,         // existing file only
         FILE_ATTRIBUTE_NORMAL | FILE_FLAG_OVERLAPPED, // normal file
         NULL);
+    
+    if (hFile == INVALID_HANDLE_VALUE)
+    {
+        DisplayError(TEXT("CreateFile"));
+        _tprintf(TEXT("Terminal failure: unable to open file \"%s\" for read.\n"), filename);
+        std::abort();
+    }
+
+    return hFile;
+}
+
+LONGLONG getFileSize(char *filename) {
+    HANDLE hFile = getFileHandle(filename);
+    LARGE_INTEGER size;
+    GetFileSizeEx(hFile, &size);
+
+    return size.QuadPart;
 }
 
 void DisplayError(LPTSTR lpszFunction)
@@ -70,7 +91,7 @@ void DisplayError(LPTSTR lpszFunction)
     LocalFree(lpDisplayBuf);
 }
 
-void readFile(char* filename, void* buffer, OVERLAPPED& ol, DWORD& dwBytesRead, unsigned __int64& bufferSize) {
+void readFile(char* filename, void* buffer, OVERLAPPED& ol, uint32& dwBytesRead, uint32 bufferSize) {
     HANDLE hFile = getFileHandle(filename);
     if (FALSE == ReadFileEx(hFile, buffer, bufferSize, &ol, FileIOCompletionRoutine))
     {
