@@ -42,6 +42,12 @@
     <ClInclude Include="ArrayHashReader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="SplitHash.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="InvertedLinks.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -60,6 +66,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="ArrayHashReader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SplitHash.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

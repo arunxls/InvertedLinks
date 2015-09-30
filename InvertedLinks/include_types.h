@@ -3,9 +3,7 @@
 #include <windows.h>
 
 // #define _HAS_ITERATOR_DEBUGGING 0
-#define BUFFERSIZE 500
 #define _1_MB 1000000
-
 
 typedef unsigned __int64 uint64;
 typedef unsigned __int32 uint32;

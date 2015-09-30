@@ -14,5 +14,6 @@ public:
     ArrayHashReader(void*, void*);
     ArrayHashReader(ArrayGraphReader& graph);
     ~ArrayHashReader();
+
 };
 
