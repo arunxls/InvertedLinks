@@ -141,7 +141,6 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="ArrayGraphReader.h" />
     <ClInclude Include="ArrayHashCountReader.h" />
     <ClInclude Include="ArrayHashReader.h" />
     <ClInclude Include="FileReader.h" />
@@ -149,6 +148,7 @@
     <ClInclude Include="file_manager.h" />
     <ClInclude Include="include_types.h" />
     <ClInclude Include="InvertedLinks.h" />
+    <ClInclude Include="MergeHash.h" />
     <ClInclude Include="SplitHash.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
@@ -160,6 +160,7 @@
     <ClCompile Include="FileReader.cpp" />
     <ClCompile Include="FileWriter.cpp" />
     <ClCompile Include="InvertedLinks.cpp" />
+    <ClCompile Include="MergeHash.cpp" />
     <ClCompile Include="SplitHash.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

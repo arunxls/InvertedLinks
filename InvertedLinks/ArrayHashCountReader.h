@@ -15,6 +15,7 @@ public:
 
     std::vector<std::string> output_files;
 
+    ArrayHashCountReader() :start(), end(), start_offset(), end_offset(), output_files() {};
     ArrayHashCountReader(void*, void*);
     ~ArrayHashCountReader();
 

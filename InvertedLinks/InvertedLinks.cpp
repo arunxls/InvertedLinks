@@ -8,6 +8,7 @@
 #include "include_types.h"
 #include "FileReader.h"
 #include "SplitHash.h"
+#include "MergeHash.h"
 
 #define BUFFERSIZE 500
 
@@ -25,6 +26,8 @@ void __cdecl _tmain(int argc, TCHAR *argv[])
 
     SplitHash splitHash(argv[1], buffer, buffer + buffer_size);
     splitHash.execute();
+
+    MergeHash merge(buffer, buffer + buffer_size, splitHash.merge_files);
 
     return;
 }
