@@ -1,19 +1,30 @@
 #pragma once
 
+#include <windows.h>
 #include <string>
 #include "include_types.h"
-#include <windows.h>
 
 class FileReader
 {
 public:
     char* filename;
-    uint32 offset_overall;
+    uint64 offset_overall;
     uint32 offset_current_read;
+    uint64 size;
+
+    void DisplayError(LPTSTR lpszFunction);
 
     FileReader(char* filename);
-    void read(void* buffer, uint32 bytesTotransfer, uint32& bytesTrasferred);
     FileReader(std::string file);
     ~FileReader();
+
+    void read(LPVOID buffer, uint32 bytesTotransfer, uint32& bytesTrasferred);
+    bool has_next();
+    LONGLONG getFileSize();
+    void reduceOffset(uint32);
+
+private:
+    void readFile(char*, LPVOID, OVERLAPPED&, uint32&, uint32);
+    HANDLE getFileHandle();
 };
 

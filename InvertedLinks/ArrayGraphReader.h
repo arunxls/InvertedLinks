@@ -5,15 +5,18 @@
 class ArrayGraphReader
 {
 public:
-    HeaderGraph* start;
-    HeaderGraph* end;
+    char* start;
+    char* end;
 
-    HeaderGraph* start_offset;
-    HeaderGraph* end_offset;
+    char* start_offset;
+    char* end_offset;
 
     FileReader* FH;
 
     ArrayGraphReader(void*, void*, FileReader*);
     ~ArrayGraphReader();
+    bool has_next();
+    HashCount next();
+    void load();
 };
 
