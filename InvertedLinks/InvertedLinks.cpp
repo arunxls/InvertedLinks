@@ -25,9 +25,14 @@ void __cdecl _tmain(int argc, TCHAR *argv[])
     char * buffer = new char[buffer_size];
 
     SplitHash splitHash(argv[1], buffer, buffer + buffer_size);
-    splitHash.execute();
+    //splitHash.execute();
+    for (int i = 1; i < 45; i++) {
+        std::string str = OUTPUT_PREFIX + std::to_string(i) + OUTPUT_SUFFIX;
+        splitHash.merge_files.push_back(str);
+    }
 
     MergeHash merge(buffer, buffer + buffer_size, splitHash.merge_files);
+    merge.execute();
 
     return;
 }

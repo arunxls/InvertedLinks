@@ -1,7 +1,8 @@
 #pragma once
 #include "include_types.h"
 #include "FileWriter.h"
-#include <vector>
+#include "FileReader.h"
+#include <deque>
 #include <string>
 
 class ArrayHashCountReader
@@ -13,19 +14,24 @@ public:
     char* start_offset;
     char* end_offset;
 
-    std::vector<std::string> output_files;
+    std::deque<std::string> output_files;
 
     ArrayHashCountReader() :start(), end(), start_offset(), end_offset(), output_files() {};
     ArrayHashCountReader(void*, void*);
     ~ArrayHashCountReader();
 
-    void put_split_files(HashCount&);
+    void putSplitFiles(HashCount&);
     void sort();
     void compact();
     void writeToDisk(std::string);
+    bool has_next();
+    HashCount next();
+    void load();
+    void setFileReader(FileReader* FR);
 
 private:
     uint32 file_count;
     std::string getNewOutputFile();
+    FileReader* FR;
 };
 

@@ -1,6 +1,6 @@
 #pragma once
 
-#include <vector>
+#include <deque>
 #include <string>
 #include "ArrayHashCountReader.h"
 
@@ -9,7 +9,7 @@
 class MergeHash
 {
 public:
-    std::vector<std::string> merge_files;
+    std::deque<std::string> merge_files;
     char* start;
     char* end;
     
@@ -18,7 +18,9 @@ public:
     ArrayHashCountReader write_merged;
 
 
-    MergeHash(char*, char*, std::vector<std::string>);
+    MergeHash(char*, char*, std::deque<std::string>);
     ~MergeHash();
+
+    void execute();
 };
 
