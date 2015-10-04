@@ -11,6 +11,7 @@
 #include "MergeHash.h"
 #include "InvertedLinks.h"
 #include "ArrayHashCountReader.h"
+#include "Map.h"
 
 #define BUFFERSIZE 500
 
@@ -28,15 +29,18 @@ void __cdecl _tmain(int argc, TCHAR *argv[])
     HashCount* buffer_start = new HashCount[buffer_size/sizeof(HashCount)];
     HashCount* buffer_end = buffer_start + buffer_size / sizeof(HashCount);
 
-    SplitHash splitHash(argv[1], buffer_start, buffer_end);
-    splitHash.execute();
+    //SplitHash splitHash(argv[1], buffer_start, buffer_end);
+    //splitHash.execute();
     //for (int i = 1; i < 48; i++) {
     //    std::string str = OUTPUT_PREFIX + std::to_string(i) + OUTPUT_SUFFIX;
     //    splitHash.merge_files.push_back(str);
     //}
 
-    MergeHash merge(buffer_start, buffer_end, splitHash.merge_files);
-    merge.execute();
+    //MergeHash merge(buffer_start, buffer_end, splitHash.merge_files);
+    //merge.execute();
+
+    Map map(buffer_start, buffer_end, "merge93", argv[2]);
+    map.execute();
 
     return;
 }
