@@ -9,6 +9,8 @@
 #include "FileReader.h"
 #include "SplitHash.h"
 #include "MergeHash.h"
+#include "InvertedLinks.h"
+#include "ArrayHashCountReader.h"
 
 #define BUFFERSIZE 500
 
@@ -22,17 +24,35 @@ void __cdecl _tmain(int argc, TCHAR *argv[])
     }
 
     uint32 buffer_size = BUFFERSIZE * _1_MB;
-    char * buffer = new char[buffer_size];
 
-    SplitHash splitHash(argv[1], buffer, buffer + buffer_size);
-    //splitHash.execute();
-    for (int i = 1; i < 45; i++) {
+    HashCount* buffer_start = new HashCount[buffer_size/sizeof(HashCount)];
+    HashCount* buffer_end = buffer_start + buffer_size / sizeof(HashCount);
+    //char * buffer = new char[buffer_size];
+
+    SplitHash splitHash(argv[1], buffer_start, buffer_end);
+    splitHash.execute();
+    /*for (int i = 1; i < 48; i++) {
         std::string str = OUTPUT_PREFIX + std::to_string(i) + OUTPUT_SUFFIX;
         splitHash.merge_files.push_back(str);
-    }
+    }*/
 
-    MergeHash merge(buffer, buffer + buffer_size, splitHash.merge_files);
+    MergeHash merge(buffer_start, buffer_end, splitHash.merge_files);
     merge.execute();
+
+    /*int count = 0;
+    for (std::string s : splitHash.merge_files) {
+        ArrayHashCountReader foo = ArrayHashCountReader(buffer_start, buffer_end);
+        FileReader fr = FileReader(s);
+        foo.setFileReader(&fr);
+        while (foo.has_next()) {
+            HashCount h = foo.next();
+            if (h.hash == 17241455985643631736ULL) {
+                count += h.count;
+            }
+        }
+    }
+    
+    printf("%d", count);*/
 
     return;
 }

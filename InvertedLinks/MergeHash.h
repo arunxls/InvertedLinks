@@ -1,4 +1,5 @@
 #pragma once
+#define NOMINMAX
 
 #include <deque>
 #include <string>
@@ -17,10 +18,13 @@ public:
     ArrayHashCountReader read_2;
     ArrayHashCountReader write_merged;
 
-
-    MergeHash(char*, char*, std::deque<std::string>);
+    MergeHash(void*, void*, std::deque<std::string>);
     ~MergeHash();
 
     void execute();
+
+private:
+    uint32 file_count;
+    std::string getNewOutputFile();
 };
 

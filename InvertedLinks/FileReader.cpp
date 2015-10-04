@@ -11,7 +11,7 @@ VOID CALLBACK FileIOCompletionRoutine(
     __in  LPOVERLAPPED lpOverlapped)
 {
     _tprintf(TEXT("Error code:\t%x\n"), dwErrorCode);
-    _tprintf(TEXT("Number of bytes:\t%x\n"), dwNumberOfBytesTransfered);
+    _tprintf(TEXT("Number of bytes:\t%I32u\n"), dwNumberOfBytesTransfered);
     g_BytesTransferred = dwNumberOfBytesTransfered;
 }
 
@@ -57,7 +57,7 @@ void FileReader::DisplayError(LPTSTR lpszFunction)
     LocalFree(lpDisplayBuf);
 }
 
-FileReader::FileReader(char* filename)
+FileReader::FileReader(char*& filename)
 {
     this->filename = filename;
     this->offset_current_read = 0;
@@ -66,7 +66,7 @@ FileReader::FileReader(char* filename)
     this->size = getFileSize();
 }
 
-FileReader::FileReader(std::string file)
+FileReader::FileReader(std::string& file)
 {
     this->filename = &file[0u];
     this->offset_current_read = 0;
@@ -115,6 +115,7 @@ void FileReader::reduceOffset(uint32 reduction)
 }
 
 void FileReader::readFile(char* filename, LPVOID buffer, OVERLAPPED& ol, uint32& dwBytesRead, uint32 bufferSize) {
+    printf("Reading %s\n", filename);
     HANDLE hFile = this->getFileHandle();
     if (FALSE == ReadFileEx(hFile, (char*) buffer, bufferSize, &ol, FileIOCompletionRoutine))
     {

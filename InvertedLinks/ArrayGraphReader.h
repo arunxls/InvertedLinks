@@ -13,6 +13,7 @@ public:
 
     FileReader* FH;
 
+    ArrayGraphReader() : start(), end(), start_offset(), end_offset() {};
     ArrayGraphReader(void*, void*, FileReader*);
     ~ArrayGraphReader();
     bool has_next();

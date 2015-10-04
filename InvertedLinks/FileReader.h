@@ -14,8 +14,9 @@ public:
 
     void DisplayError(LPTSTR lpszFunction);
 
-    FileReader(char* filename);
-    FileReader(std::string file);
+    FileReader() {};
+    FileReader(char*& filename);
+    FileReader(std::string& file);
     ~FileReader();
 
     void read(LPVOID buffer, uint32 bytesTotransfer, uint32& bytesTrasferred);
