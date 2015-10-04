@@ -9,8 +9,8 @@ typedef unsigned __int64 uint64;
 typedef unsigned __int32 uint32;
 typedef unsigned short   ushort;
 
-const std::string OUTPUT_PREFIX = "__merge__";
-const std::string OUTPUT_SUFFIX = ".dat";
+const std::string OUTPUT_PREFIX = "merge";
+const std::string OUTPUT_SUFFIX = "";
 
 #pragma pack(push,1) // change struct packing to 1 byte
 class HeaderGraph {

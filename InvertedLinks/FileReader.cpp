@@ -104,7 +104,7 @@ LONGLONG FileReader::getFileSize()
     HANDLE hFile = this->getFileHandle();
     LARGE_INTEGER size;
     GetFileSizeEx(hFile, &size);
-
+    CloseHandle(hFile);
     return size.QuadPart;
 }
 
@@ -126,6 +126,7 @@ void FileReader::readFile(char* filename, LPVOID buffer, OVERLAPPED& ol, uint32&
     }
     SleepEx(5000, TRUE);
     dwBytesRead = g_BytesTransferred;
+    CloseHandle(hFile);
 }
 
 HANDLE FileReader::getFileHandle()
