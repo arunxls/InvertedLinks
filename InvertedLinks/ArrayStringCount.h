@@ -1,6 +1,10 @@
 #pragma once
 #include "include_types.h"
 #include "ArrayStringPointer.h"
+
+const std::string STRING_OUTPUT_PREFIX = "string";
+const std::string STRING_OUTPUT_SUFFIX = "";
+
 class ArrayStringCount
 {
 public:
@@ -21,10 +25,10 @@ public:
 
     void put(char*, uint32);
     void put(StringCount*);
+    void writeToDisk();
 
 private:
     void copySorted();
-    void writeToDisk();
     std::string getNewOutputFile();
 };
 

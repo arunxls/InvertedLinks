@@ -26,11 +26,7 @@ void ArrayStringCount::put(char *string, uint32 count)
 {
     int length = strlen(string) + 1;
     if (this->start_offset + length + sizeof(StringCount) > this->end) {
-        this->stringPointer->sort();
-        this->copySorted();
-        this->copy->writeToDisk();
-        this->copy->start_offset = this->copy->start;
-        this->stringPointer->start_offset = this->stringPointer->start;
+        this->writeToDisk();
     }
 
     this->stringPointer->put(this->start_offset);
@@ -70,13 +66,19 @@ void ArrayStringCount::copySorted()
 
 void ArrayStringCount::writeToDisk()
 {
+    this->stringPointer->sort();
+    this->copySorted();
+
     std::string file = this->getNewOutputFile();
     FileWriter FW = FileWriter(file);
     FW.write(this->start, this->start_offset - this->start);
+    
     this->start_offset = this->start;
+    this->copy->start_offset = this->copy->start;
+    this->stringPointer->start_offset = this->stringPointer->start;
 }
 
 std::string ArrayStringCount::getNewOutputFile()
 {
-    return OUTPUT_PREFIX + std::to_string(this->file_count++) + OUTPUT_SUFFIX;;
+    return STRING_OUTPUT_PREFIX + std::to_string(this->file_count++) + STRING_OUTPUT_SUFFIX;;
 }

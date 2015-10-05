@@ -37,10 +37,15 @@ void Map::execute()
 
     while (this->hashCount.has_next()) {
         HashCount h = this->hashCount.next();
+        if (h.hash == 17082586730649405658LLU) {
+            printf("\n");
+        }
         char *string = this->stringMap.next(h.hash);
+        
         //std::cout << string << " " << h.count <<std::endl;
         this->stringCountOriginal.put(string, h.count);
     }
+    this->stringCountOriginal.writeToDisk();
 
     return;
 }
