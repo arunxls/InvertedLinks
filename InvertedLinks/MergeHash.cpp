@@ -59,8 +59,8 @@ void MergeHash::execute()
         this->write_merged.writeToDisk(str3);
         this->merge_files.push_back(str3);
         
-        //DeleteFile(TEXT(str1.c_str()));
-        //DeleteFile(TEXT(str2.c_str()));
+        DeleteFile(TEXT(str1.c_str()));
+        DeleteFile(TEXT(str2.c_str()));
     }
 
     return;
