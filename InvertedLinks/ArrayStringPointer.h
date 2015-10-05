@@ -1,15 +1,20 @@
 #pragma once
+#include "include_types.h"
+
 class ArrayStringPointer
 {
 public:
-    char* start;
-    char* end;
+    StringCount** start;
+    StringCount** end;
 
-    char *start_offset;
-    char *end_offset;
+    StringCount** start_offset;
+    StringCount** end_offset;
 
     ArrayStringPointer();
     ArrayStringPointer(void*, void*);
     ~ArrayStringPointer();
+
+    void put(char*);
+    void sort();
 };
 

@@ -6,8 +6,8 @@
 #include "ArrayStringMap.h"
 #include <string>
 
-#define COUNTSIZE 32
-#define POINTERSIZE 32
+#define COUNTSIZE 36
+#define POINTERSIZE 36
 
 class Map
 {
@@ -20,6 +20,8 @@ public:
     ArrayStringCount stringCountSorted;
     ArrayStringPointer stringPointer;
     ArrayStringMap stringMap;
+
+    std::string merge_file;
 
     Map(void*, void*, std::string, char*);
     ~Map();

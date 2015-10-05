@@ -5,7 +5,7 @@
 #include <string>
 #include "ArrayHashCountReader.h"
 
-#define MERGESIZE 32
+#define MERGESIZE 36
 
 class MergeHash
 {

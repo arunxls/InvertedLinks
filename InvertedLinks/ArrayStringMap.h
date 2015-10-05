@@ -1,5 +1,6 @@
 #pragma once
 #include "include_types.h"
+#include "FileReader.h"
 
 class ArrayStringMap
 {
@@ -11,6 +12,7 @@ public:
     char* end_offset;
 
     char* filename;
+    FileReader *FR;
 
     ArrayStringMap();
     ArrayStringMap(void*, void*, char*);
@@ -20,5 +22,6 @@ public:
 
 private:
     void load();
+    uint32 size_of_start_offset();
 };
 

@@ -63,7 +63,7 @@ FileReader::FileReader(char*& filename)
     this->offset_current_read = 0;
     this->offset_overall = 0;
     
-    this->size = getFileSize();
+    this->size = this->getFileSize();
 }
 
 FileReader::FileReader(std::string& file)
@@ -72,7 +72,7 @@ FileReader::FileReader(std::string& file)
     this->offset_current_read = 0;
     this->offset_overall = 0;
  
-    this->size = getFileSize();
+    this->size = this->getFileSize();
 }
 
 FileReader::~FileReader()
@@ -116,7 +116,13 @@ void FileReader::reduceOffset(uint32 reduction)
 
 void FileReader::readFile(char* filename, LPVOID buffer, OVERLAPPED& ol, uint32& dwBytesRead, uint32 bufferSize) {
     printf("Reading %s\n", filename);
-    HANDLE hFile = this->getFileHandle();
+    HANDLE hFile = CreateFile(this->filename,               // file to open
+        GENERIC_READ,          // open for reading
+        0,       // share for reading
+        NULL,                  // default security
+        OPEN_EXISTING,         // existing file only
+        FILE_ATTRIBUTE_NORMAL | FILE_FLAG_OVERLAPPED, // normal file
+        NULL);
     if (FALSE == ReadFileEx(hFile, (char*) buffer, bufferSize, &ol, FileIOCompletionRoutine))
     {
         this->DisplayError(TEXT("ReadFile"));

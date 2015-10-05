@@ -1,6 +1,8 @@
 #include "stdafx.h"
 #include "FileWriter.h"
 #include "file_manager.h"
+#include <chrono>
+#include <thread>
 
 void FileWriter::DisplayError(LPTSTR lpszFunction)
 // Routine Description:
@@ -62,7 +64,7 @@ void FileWriter::write(void * start, uint32 bytesToWrite)
     hFile = CreateFile(
         this->filename,               // name of the write
         FILE_APPEND_DATA,          // open for writing
-        0,                      // do not share
+        FILE_SHARE_READ,                      // shared read 
         NULL,                   // default security
         OPEN_EXISTING,             // open existing file
         FILE_ATTRIBUTE_NORMAL | FILE_APPEND_DATA,  // normal file
@@ -72,7 +74,7 @@ void FileWriter::write(void * start, uint32 bytesToWrite)
         hFile = CreateFile(
             this->filename,               // name of the write
             GENERIC_WRITE,          // open for writing
-            0,                      // do not share
+            0,                      // shared read
             NULL,                   // default security
             CREATE_NEW,             // open existing file
             FILE_ATTRIBUTE_NORMAL,  // normal file

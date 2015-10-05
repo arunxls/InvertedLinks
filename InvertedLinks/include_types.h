@@ -48,4 +48,20 @@ public:
     }
 };
 
+class HeaderMap {
+public:
+    uint64 hash;
+    ushort len;
+};
+
+class StringCount {
+public:
+    uint32 count;
+    ushort len;
+
+    bool operator<(const StringCount& a) const
+    {
+        return count < a.count;
+    }
+};
 #pragma pack(pop)
