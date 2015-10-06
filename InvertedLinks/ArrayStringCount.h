@@ -1,6 +1,8 @@
 #pragma once
 #include "include_types.h"
 #include "ArrayStringPointer.h"
+#include "FileReader.h"
+#include "FileWriter.h"
 #include <string>
 #include <deque>
 
@@ -22,8 +24,8 @@ public:
     uint32 file_count;
     std::deque<std::string> output_files;
 
-    FileReader* FR;
-    FileWriter* FW;
+    //FileReader* FR;
+    //FileWriter* FW;
 
     ArrayStringCount();
     ArrayStringCount(void*, void*);
