@@ -43,9 +43,19 @@ void MapMerge::execute()
         this->merge_files.pop_front();
         this->merge_2.setFileReader(&FR2);
 
-        std::string str3 = this->getNewOutputFile();
-        FileWriter FW(str3);
-        this->output.setFileWriter(&FW);
+        std::string str3;
+        bool final_run = false;
+        if (this->merge_files.size() != 0) {
+            str3 = this->getNewOutputFile();
+            FileWriter FW(str3);
+            this->output.setFileWriter(&FW);
+        }
+        else {
+            str3 = "output.txt";
+            final_run = true;
+            FileWriter FW(str3);
+            this->output.setFileWriter(&FW);
+        }
 
         while (this->merge_1.has_next() || this->merge_2.has_next()) {
             StringCount* h;
@@ -62,7 +72,12 @@ void MapMerge::execute()
                 h = this->merge_2.next();
             }
 
-            this->output.putSingleFile(h);
+            if (final_run) {
+                this->output.putSingleFile(h);
+            }
+            else {
+                this->output.putSingleFile(h);
+            }
         }
 
         this->output.writeToDisk(str3);
