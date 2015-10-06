@@ -46,6 +46,7 @@ void Map::execute()
         this->stringCountOriginal.put(string, h.count);
     }
     this->stringCountOriginal.writeToDisk();
+    this->output_files = this->stringCountOriginal.output_files;
 
     return;
 }

@@ -70,6 +70,7 @@ void ArrayStringCount::writeToDisk()
     this->copySorted();
 
     std::string file = this->getNewOutputFile();
+    this->output_files.push_back(file);
     FileWriter FW = FileWriter(file);
     FW.write(this->start, this->start_offset - this->start);
     

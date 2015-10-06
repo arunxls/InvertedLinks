@@ -5,6 +5,7 @@
 #include "ArrayStringPointer.h"
 #include "ArrayStringMap.h"
 #include <string>
+#include <deque>
 
 #define COUNTSIZE 36
 #define POINTERSIZE 9 //This then gets multiplied by sizeof(char*)
@@ -22,6 +23,7 @@ public:
     ArrayStringMap stringMap;
 
     std::string merge_file;
+    std::deque<std::string> output_files;
 
     Map(void*, void*, std::string, char*);
     ~Map();
