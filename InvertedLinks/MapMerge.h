@@ -12,6 +12,8 @@ public:
     char* start_offset;
     char* end_offset;
 
+    int file_count;
+
     ArrayStringCount merge_1;
     ArrayStringCount merge_2;
     ArrayStringCount output;

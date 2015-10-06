@@ -24,8 +24,8 @@ public:
     uint32 file_count;
     std::deque<std::string> output_files;
 
-    //FileReader* FR;
-    //FileWriter* FW;
+    FileReader* FR;
+    FileWriter* FW;
 
     ArrayStringCount();
     ArrayStringCount(void*, void*);
@@ -35,14 +35,15 @@ public:
     void put(StringCount*);
     void writeToDisk();
     void writeToDisk(std::string);
-    void putSingleFile(StringCount&);
+    void putSingleFile(StringCount*);
     void setFileWriter(FileWriter*);
     void setFileReader(FileReader*);
-    StringCount& next();
+    StringCount* next();
     bool has_next();
-    StringCount& current();
+    StringCount* current();
 
 private:
+    void load();
     void copySorted();
     std::string getNewOutputFile();
 };

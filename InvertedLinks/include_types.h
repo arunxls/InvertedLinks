@@ -63,5 +63,10 @@ public:
     {
         return count < a.count;
     }
+
+    bool operator>(const StringCount& a) const
+    {
+        return count > a.count;
+    }
 };
 #pragma pack(pop)

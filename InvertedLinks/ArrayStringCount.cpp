@@ -54,6 +54,14 @@ void ArrayStringCount::put(StringCount* toCopy)
     strcpy(this->start_offset, (char*) (toCopy + 1));
     this->start_offset += toCopy->len;
 }
+void ArrayStringCount::load()
+{
+    this->FR->reduceOffset(this->end_offset - this->start_offset);
+    uint32 bytesTransferred = 0;
+    this->FR->read(this->start, this->end - this->start, bytesTransferred);
+    this->start_offset = this->start;
+    this->end_offset = this->start_offset + bytesTransferred;
+}
 void ArrayStringCount::copySorted()
 {
     StringCount** current = this->stringPointer->start;
@@ -72,11 +80,66 @@ void ArrayStringCount::writeToDisk()
     std::string file = this->getNewOutputFile();
     this->output_files.push_back(file);
     FileWriter FW = FileWriter(file);
-    FW.write(this->start, this->start_offset - this->start);
+    FW.write(this->copy->start, this->copy->start_offset - this->copy->start);
     
     this->start_offset = this->start;
     this->copy->start_offset = this->copy->start;
     this->stringPointer->start_offset = this->stringPointer->start;
+}
+
+void ArrayStringCount::writeToDisk(std::string file)
+{
+    FileWriter FW = FileWriter(file);
+    FW.write(this->start, this->start_offset - this->start);
+    this->start_offset = this->start;
+}
+
+void ArrayStringCount::putSingleFile(StringCount * str)
+{
+    if (this->start_offset + sizeof(StringCount) + str->len > this->end) {
+        this->writeToDisk(this->FW->filename);
+    }
+
+    StringCount *write = (StringCount*) this->start_offset;
+    write->count = str->count;
+    write->len = str->len;
+    this->start_offset += sizeof(StringCount);
+    strcpy(this->start_offset, (char*) (str + 1));
+    this->start_offset += write->len;
+}
+
+void ArrayStringCount::setFileWriter(FileWriter *FW)
+{
+    this->FW = FW;
+}
+
+void ArrayStringCount::setFileReader(FileReader *FR)
+{
+    this->FR = FR;
+}
+
+StringCount * ArrayStringCount::next()
+{
+    if (this->start_offset + sizeof(StringCount) + ((StringCount*)this->start_offset)->len > this->end_offset) {
+        this->load();
+    }
+
+    StringCount* ret = (StringCount*) this->start_offset;
+    this->start_offset += sizeof(StringCount) + ret->len;
+    return ret;
+}
+
+bool ArrayStringCount::has_next()
+{
+    return this->FR->has_next() ? true : (this->start_offset < this->end_offset);
+}
+
+StringCount* ArrayStringCount::current()
+{
+    if (this->start_offset + sizeof(StringCount) + ((StringCount*) this->start_offset)->len > this->end_offset) {
+        this->load();
+    }
+    return (StringCount*) this->start_offset;
 }
 
 std::string ArrayStringCount::getNewOutputFile()
