@@ -29,33 +29,13 @@ void __cdecl _tmain(int argc, TCHAR *argv[])
     HashCount* buffer_start = new HashCount[buffer_size/sizeof(HashCount)];
     HashCount* buffer_end = buffer_start + buffer_size / sizeof(HashCount);
 
-    //SplitHash splitHash(argv[1], buffer_start, buffer_end);
-    //splitHash.execute();
-    //for (int i = 93; i < 94; i++) {
-    //    std::string str = OUTPUT_PREFIX + std::to_string(i) + OUTPUT_SUFFIX;
-    //    splitHash.merge_files.push_back(str);
-    //}
+    SplitHash splitHash(argv[1], buffer_start, buffer_end);
+    splitHash.execute();
 
-    //int count = 0;
-    //for (std::string s : splitHash.merge_files) {
-    //    ArrayHashCountReader foo = ArrayHashCountReader(buffer_start, buffer_end);
-    //    FileReader fr = FileReader(s);
-    //    foo.setFileReader(&fr);
-    //    while (foo.has_next()) {
-    //        HashCount h = foo.next();
-    //        if (h.hash == 17082586730649405658ULL) {
-    //            printf("%s = %d\n",s, h.count);
-    //            count += h.count;
-    //        }
-    //    }
-    //}
+    MergeHash merge(buffer_start, buffer_end, splitHash.merge_files);
+    merge.execute();
 
-    //printf("%d", count);
-
-    //MergeHash merge(buffer_start, buffer_end, splitHash.merge_files);
-    //merge.execute();
-
-    Map map(buffer_start, buffer_end, "merge93", argv[2]);
+    Map map(buffer_start, buffer_end, merge.merge_files[0], argv[2]);
     map.execute();
 
     return;

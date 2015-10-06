@@ -7,7 +7,7 @@
 #include <string>
 
 #define COUNTSIZE 36
-#define POINTERSIZE 36
+#define POINTERSIZE 9 //This then gets multiplied by sizeof(char*)
 
 class Map
 {

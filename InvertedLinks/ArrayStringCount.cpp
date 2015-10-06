@@ -14,7 +14,7 @@ ArrayStringCount::ArrayStringCount(void *start, void *end)
     this->start_offset = this->start;
     this->end_offset = this->start;
 
-    this->file_count = 0;
+    this->file_count = 1;
 }
 
 
