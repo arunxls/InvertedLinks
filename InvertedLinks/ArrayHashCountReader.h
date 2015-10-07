@@ -24,7 +24,7 @@ public:
     void putSingleFile(HashCount&);
     void sort();
     void compact();
-    void writeToDisk(std::string);
+    void writeToDisk(FileWriter* FH);
     bool has_next();
     HashCount& current();
     HashCount next();

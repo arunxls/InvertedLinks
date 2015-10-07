@@ -2,7 +2,11 @@
 #include <windows.h>
 #include "FileReader.h"
 #include "include_types.h"
-#include "file_manager.h"
+#include <tchar.h>
+#include <cstdio>
+#include <strsafe.h>
+#include <csignal>
+#include <cstdlib>
 
 DWORD g_BytesTransferred = 0;
 VOID CALLBACK FileIOCompletionRoutine(
@@ -10,8 +14,11 @@ VOID CALLBACK FileIOCompletionRoutine(
     __in  DWORD dwNumberOfBytesTransfered,
     __in  LPOVERLAPPED lpOverlapped)
 {
-    _tprintf(TEXT("Error code:\t%x\n"), dwErrorCode);
-    _tprintf(TEXT("Number of bytes:\t%I32u\n"), dwNumberOfBytesTransfered);
+    if (DEBUG)
+    {
+        _tprintf(TEXT("Error code:\t%x\n"), dwErrorCode);
+        _tprintf(TEXT("Number of bytes:\t%I32u\n"), dwNumberOfBytesTransfered);
+    }
     g_BytesTransferred = dwNumberOfBytesTransfered;
 }
 
@@ -116,7 +123,11 @@ void FileReader::reduceOffset(uint32 reduction)
 }
 
 void FileReader::readFile(char* filename, LPVOID buffer, OVERLAPPED& ol, uint32& dwBytesRead, uint32 bufferSize) {
-    printf("Reading %s\n", filename);
+    if (DEBUG)
+    {
+        printf("Reading %s\n", filename);
+    }
+
     if (FALSE == ReadFileEx(this->hFile, (char*) buffer, bufferSize, &ol, FileIOCompletionRoutine))
     {
         this->DisplayError(TEXT("ReadFile"));

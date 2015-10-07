@@ -45,9 +45,10 @@ void Map::execute()
         char *string = this->stringMap->next(h.hash);
         this->stringCountOriginal->put(string, h.count);
     }
-    this->stringCountOriginal->writeToDisk();
+    this->stringCountOriginal->sortCopyWrite();
     this->output_files = this->stringCountOriginal->output_files;
 
     delete FR;
+    DeleteFile(TEXT(this->merge_file.c_str()));
     return;
 }

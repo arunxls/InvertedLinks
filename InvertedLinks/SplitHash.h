@@ -12,8 +12,8 @@ public:
     char* buffer_start;
     char* buffer_end;
 
-    ArrayGraphReader graph;
-    ArrayHashCountReader hashCount;
+    ArrayGraphReader* graph;
+    ArrayHashCountReader* hashCount;
     FileReader *FR;
 
     std::deque<std::string> merge_files;

@@ -14,9 +14,9 @@ public:
 
     int file_count;
 
-    ArrayStringCount merge_1;
-    ArrayStringCount merge_2;
-    ArrayStringCount output;
+    ArrayStringCount* merge_1;
+    ArrayStringCount* merge_2;
+    ArrayStringCount* output;
 
     std::deque<std::string> merge_files;
     MapMerge();

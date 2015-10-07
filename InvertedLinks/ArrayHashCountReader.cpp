@@ -24,7 +24,8 @@ void ArrayHashCountReader::putSplitFiles(HashCount& h)
         this->sort();
         this->compact();
         std::string file_name = this->getNewOutputFile();
-        this->writeToDisk(file_name);
+        FileWriter FW = FileWriter(file_name);
+        this->writeToDisk(&FW);
     }
 
     HashCount* foo = (HashCount*) this->start_offset;
@@ -69,21 +70,15 @@ void ArrayHashCountReader::compact()
     this->start_offset = (char*) (insert_p + 1);
 }
 
-void ArrayHashCountReader::writeToDisk(std::string filename)
+void ArrayHashCountReader::writeToDisk(FileWriter* FH)
 {
-    this->output_files.emplace_back(filename);
-    FileWriter FH(filename);
-    FH.write(this->start, this->start_offset - this->start);
+    this->output_files.emplace_back(FH->filename);
+    FH->write(this->start, this->start_offset - this->start);
     this->start_offset = this->start;
 }
 
 bool ArrayHashCountReader::has_next()
 {
-    if (this->FR == NULL) {
-        printf("FileReader is not set!\n\n");
-        std::abort();
-    }
-
     return FR->has_next() ? true : (this->start_offset < this->end_offset);
 }
 

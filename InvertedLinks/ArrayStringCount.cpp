@@ -28,7 +28,7 @@ void ArrayStringCount::put(char *string, uint32 count)
 {
     int length = strlen(string) + 1;
     if (this->start_offset + length + sizeof(StringCount) > this->end) {
-        this->writeToDisk();
+        this->sortCopyWrite();
     }
 
     this->stringPointer->put(this->start_offset);
@@ -74,7 +74,7 @@ void ArrayStringCount::copySorted()
     }
 }
 
-void ArrayStringCount::writeToDisk()
+void ArrayStringCount::sortCopyWrite()
 {
     this->stringPointer->sort();
     this->copySorted();
@@ -82,24 +82,24 @@ void ArrayStringCount::writeToDisk()
     std::string file = this->getNewOutputFile();
     this->output_files.push_back(file);
     FileWriter FW = FileWriter(file);
-    FW.write(this->copy->start, this->copy->start_offset - this->copy->start);
+    this->writeToDisk(&FW);
+    //FW.write(this->copy->start, this->copy->start_offset - this->copy->start);
     
-    this->start_offset = this->start;
+    //this->start_offset = this->start;
     this->copy->start_offset = this->copy->start;
     this->stringPointer->start_offset = this->stringPointer->start;
 }
 
-void ArrayStringCount::writeToDisk(std::string file)
+void ArrayStringCount::writeToDisk(FileWriter* FW)
 {
-    FileWriter FW = FileWriter(file);
-    FW.write(this->start, this->start_offset - this->start);
+    FW->write(this->start, this->start_offset - this->start);
     this->start_offset = this->start;
 }
 
 void ArrayStringCount::putSingleFile(StringCount * str)
 {
     if (this->start_offset + sizeof(StringCount) + str->len > this->end) {
-        this->writeToDisk(this->FW->filename);
+        this->writeToDisk(this->FW);
     }
 
     StringCount *write = (StringCount*) this->start_offset;
@@ -150,7 +150,7 @@ void ArrayStringCount::putFinalRun(StringCount * str)
     uint32 n = sprintf(this->start_offset, "%d %s %I32u\r\n",this->record_count, (char*)(str + 1), str->count);
     uint32 length = n + 1;
     if (this->start_offset + length > this->end) {
-        this->writeToDisk(this->FW->filename);
+        this->writeToDisk(this->FW);
         sprintf(this->start_offset, "%d %s %I32u\r\n", this->record_count, (char*)(str + 1), str->count);
     }
     this->start_offset += length;

@@ -34,8 +34,8 @@ public:
 
     void put(char*, uint32);
     void put(StringCount*);
-    void writeToDisk();
-    void writeToDisk(std::string);
+    void sortCopyWrite();
+    void writeToDisk(FileWriter*);
     void putSingleFile(StringCount*);
     void setFileWriter(FileWriter*);
     void setFileReader(FileReader*);

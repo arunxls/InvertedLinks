@@ -27,41 +27,44 @@ void MergeHash::execute()
 {
     while (this->merge_files.size() > 1) {
         std::string str1 = this->merge_files.front();
-        FileReader FR1(str1);
         this->merge_files.pop_front();
-        this->read_1->setFileReader(&FR1);
-
+        
         std::string str2 = this->merge_files.front();
-        FileReader FR2(str2);
         this->merge_files.pop_front();
-        this->read_2->setFileReader(&FR2);
+        
+        {
+            FileReader FR1(str1);
+            this->read_1->setFileReader(&FR1);
+            FileReader FR2(str2);
+            this->read_2->setFileReader(&FR2);
 
-        std::string str3 = this->getNewOutputFile();
-        FileWriter FW(str3);
-        this->write_merged->setFileWriter(&FW);
+            std::string str3 = this->getNewOutputFile();
+            FileWriter FW(str3);
+            this->write_merged->setFileWriter(&FW);
 
-        while (this->read_1->has_next() || this->read_2->has_next()) {
-            HashCount h;
-            if (this->read_1->has_next() && this->read_2->has_next()) {
-                HashCount h1 = this->read_1->current();
-                HashCount h2 = this->read_2->current();
+            while (this->read_1->has_next() || this->read_2->has_next()) {
+                HashCount h;
+                if (this->read_1->has_next() && this->read_2->has_next()) {
+                    HashCount h1 = this->read_1->current();
+                    HashCount h2 = this->read_2->current();
 
-                h = h1 < h2 ? this->read_1->next() : this->read_2->next();
+                    h = h1 < h2 ? this->read_1->next() : this->read_2->next();
+                }
+                else if (this->read_1->has_next()) {
+                    h = this->read_1->next();
+                }
+                else {
+                    h = this->read_2->next();
+                }
+
+                this->write_merged->putSingleFile(h);
             }
-            else if (this->read_1->has_next()) {
-                h = this->read_1->next();
-            }
-            else {
-                h = this->read_2->next();
-            }
-            
-            this->write_merged->putSingleFile(h);
+
+            this->write_merged->compact();
+            this->write_merged->writeToDisk(&FW);
+            this->merge_files.push_back(str3);
         }
 
-        this->write_merged->compact();
-        this->write_merged->writeToDisk(str3);
-        this->merge_files.push_back(str3);
-        
         DeleteFile(TEXT(str1.c_str()));
         DeleteFile(TEXT(str2.c_str()));
     }

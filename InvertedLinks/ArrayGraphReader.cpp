@@ -44,7 +44,10 @@ void ArrayGraphReader::load()
 {
     uint32 bytesTransferred = 0;
     this->FH->read(start, end - start, bytesTransferred);
-    _tprintf(TEXT("Data read from %s (%d bytes): \n"), this->FH->filename, this->FH->offset_current_read);
+
+    if (DEBUG) {
+        _tprintf(TEXT("Data read from %s (%d bytes): \n"), this->FH->filename, this->FH->offset_current_read);
+    }
 
     this->start_offset = start;
     this->end_offset = start + bytesTransferred;
@@ -71,7 +74,6 @@ void ArrayGraphReader::load()
         }
         else
         {
-            //printf("Missing Node %I64u, degree %d\n", hg->hash, hg->len);
             break;
         }
     }

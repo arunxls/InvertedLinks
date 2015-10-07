@@ -1,8 +1,5 @@
 #include "stdafx.h"
 #include "FileWriter.h"
-#include "file_manager.h"
-#include <chrono>
-#include <thread>
 
 void FileWriter::DisplayError(LPTSTR lpszFunction)
 // Routine Description:
@@ -46,21 +43,65 @@ void FileWriter::DisplayError(LPTSTR lpszFunction)
     LocalFree(lpDisplayBuf);
 }
 
-FileWriter::FileWriter(char * filename) :filename(filename){}
+FileWriter::FileWriter(char * filename) :filename(filename)
+{
+    this->hFile = this->getFileHandle();
+}
 
 FileWriter::FileWriter(std::string& filename){
     char* f = &filename[0u];
     this->filename = f;
+    this->hFile = this->getFileHandle();
 }
 
-FileWriter::~FileWriter(){}
+FileWriter::~FileWriter()
+{
+    CloseHandle(this->hFile);
+}
 
 void FileWriter::write(void * start, uint32 bytesToWrite)
 {
-    HANDLE hFile;
     DWORD dwBytesWritten = 0;
     BOOL bErrorFlag = FALSE;
 
+    if (DEBUG) {
+        _tprintf(TEXT("Writing %d bytes to %s.\n"), bytesToWrite, this->filename);
+    }
+
+    bErrorFlag = WriteFile(
+        this->hFile,           // open file handle
+        start,      // start of data to write
+        bytesToWrite,  // number of bytes to write
+        &dwBytesWritten, // number of bytes that were written
+        NULL);            // no overlapped structure
+
+    if (FALSE == bErrorFlag)
+    {
+        DisplayError(TEXT("WriteFile"));
+        printf("Terminal failure: Unable to write to file.\n");
+    }
+    else
+    {
+        if (dwBytesWritten != bytesToWrite)
+        {
+            // This is an error because a synchronous write that results in
+            // success (WriteFile returns TRUE) should write all data as
+            // requested. This would not necessarily be the case for
+            // asynchronous writes.
+            printf("Error: dwBytesWritten != dwBytesToWrite\n");
+        }
+        else
+        {
+            if (DEBUG) {
+                _tprintf(TEXT("Wrote %d bytes to %s successfully.\n"), dwBytesWritten, filename);
+            }
+        }
+    }
+}
+
+HANDLE FileWriter::getFileHandle()
+{
+    HANDLE hFile;
     hFile = CreateFile(
         this->filename,               // name of the write
         FILE_APPEND_DATA,          // open for writing
@@ -85,39 +126,8 @@ void FileWriter::write(void * start, uint32 bytesToWrite)
     {
         this->DisplayError(TEXT("CreateFile"));
         _tprintf(TEXT("Terminal failure: Unable to open file \"%s\" for write.\n"), filename);
-
-        return;
+        return HANDLE();
     }
 
-    _tprintf(TEXT("Writing %d bytes to %s.\n"), bytesToWrite, this->filename);
-
-    bErrorFlag = WriteFile(
-        hFile,           // open file handle
-        start,      // start of data to write
-        bytesToWrite,  // number of bytes to write
-        &dwBytesWritten, // number of bytes that were written
-        NULL);            // no overlapped structure
-
-    if (FALSE == bErrorFlag)
-    {
-        DisplayError(TEXT("WriteFile"));
-        printf("Terminal failure: Unable to write to file.\n");
-    }
-    else
-    {
-        if (dwBytesWritten != bytesToWrite)
-        {
-            // This is an error because a synchronous write that results in
-            // success (WriteFile returns TRUE) should write all data as
-            // requested. This would not necessarily be the case for
-            // asynchronous writes.
-            printf("Error: dwBytesWritten != dwBytesToWrite\n");
-        }
-        else
-        {
-            _tprintf(TEXT("Wrote %d bytes to %s successfully.\n"), dwBytesWritten, filename);
-        }
-    }
-
-    CloseHandle(hFile);
+    return hFile;
 }
