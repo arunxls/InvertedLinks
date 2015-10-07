@@ -31,24 +31,37 @@ void __cdecl _tmain(int argc, TCHAR *argv[])
     HashCount* buffer_end = buffer_start + buffer_size / sizeof(HashCount);
 
     printf("Starting split phase\n");
-    SplitHash splitHash(argv[1], buffer_start, buffer_end);
-    splitHash.execute();
-    printf("Generated %d files\n", splitHash.merge_files.size());
+    std::deque<std::string> files;
+    {
+        SplitHash splitHash(argv[1], buffer_start, buffer_end);
+        splitHash.execute();
+        files = splitHash.merge_files;
+    }
+    
+    printf("Generated %d files\n", files.size());
     printf("Ending split phase\n");
 
     printf("Starting merge phase\n");
-    MergeHash merge(buffer_start, buffer_end, splitHash.merge_files);
-    merge.execute();
+    {
+        MergeHash merge(buffer_start, buffer_end, files);
+        merge.execute();
+        files = merge.merge_files;
+    }
     printf("Ending merge phase\n");
 
     printf("Staring map split phase\n");
-    Map map(buffer_start, buffer_end, merge.merge_files[0], argv[2]);
-    map.execute();
+    {
+        Map map(buffer_start, buffer_end, files[0], argv[2]);
+        map.execute();
+        files = map.output_files;
+    }
     printf("Ending map split phase\n");
 
     printf("Starting map merge phase\n");
-    MapMerge mapMerge(buffer_start, buffer_end, map.output_files);
-    mapMerge.execute();
+    {
+        MapMerge mapMerge(buffer_start, buffer_end, files);
+        mapMerge.execute();
+    }
     printf("Ending map merge phase\n");
 
     printf("DONE!\n");

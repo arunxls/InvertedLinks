@@ -131,7 +131,7 @@ HANDLE FileReader::getFileHandle()
 {
     HANDLE hFile = CreateFile(this->filename,               // file to open
         GENERIC_READ,          // open for reading
-        FILE_SHARE_READ,       // share for reading
+        0,       // share for reading
         NULL,                  // default security
         OPEN_EXISTING,         // existing file only
         FILE_ATTRIBUTE_NORMAL | FILE_FLAG_OVERLAPPED, // normal file

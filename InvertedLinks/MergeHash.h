@@ -14,9 +14,9 @@ public:
     char* start;
     char* end;
     
-    ArrayHashCountReader read_1;
-    ArrayHashCountReader read_2;
-    ArrayHashCountReader write_merged;
+    ArrayHashCountReader* read_1;
+    ArrayHashCountReader* read_2;
+    ArrayHashCountReader* write_merged;
 
     MergeHash(void*, void*, std::deque<std::string>);
     ~MergeHash();

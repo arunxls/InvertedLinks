@@ -7,6 +7,8 @@ class FileWriter
 {
 public:
     char* filename;
+    
+    HANDLE hFile;
 
     void DisplayError(LPTSTR lpszFunction);
 
