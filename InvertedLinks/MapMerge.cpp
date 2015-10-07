@@ -73,7 +73,7 @@ void MapMerge::execute()
             }
 
             if (final_run) {
-                this->output.putSingleFile(h);
+                this->output.putFinalRun(h);
             }
             else {
                 this->output.putSingleFile(h);
@@ -83,8 +83,8 @@ void MapMerge::execute()
         this->output.writeToDisk(str3);
         this->merge_files.push_back(str3);
 
-        //DeleteFile(TEXT(str1.c_str()));
-        //DeleteFile(TEXT(str2.c_str()));
+        DeleteFile(TEXT(str1.c_str()));
+        DeleteFile(TEXT(str2.c_str()));
     }
 
     return;

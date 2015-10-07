@@ -26,6 +26,7 @@ public:
 
     FileReader* FR;
     FileWriter* FW;
+    uint32 record_count;
 
     ArrayStringCount();
     ArrayStringCount(void*, void*);
@@ -41,6 +42,7 @@ public:
     StringCount* next();
     bool has_next();
     StringCount* current();
+    void putFinalRun(StringCount*);
 
 private:
     void load();

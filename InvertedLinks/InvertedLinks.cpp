@@ -30,19 +30,18 @@ void __cdecl _tmain(int argc, TCHAR *argv[])
     HashCount* buffer_start = new HashCount[buffer_size/sizeof(HashCount)];
     HashCount* buffer_end = buffer_start + buffer_size / sizeof(HashCount);
 
-    /*SplitHash splitHash(argv[1], buffer_start, buffer_end);
+    SplitHash splitHash(argv[1], buffer_start, buffer_end);
     splitHash.execute();
 
     MergeHash merge(buffer_start, buffer_end, splitHash.merge_files);
-    merge.execute();*/
+    merge.execute();
 
-    Map map(buffer_start, buffer_end, "merge93", argv[2]);
-    //Map map(buffer_start, buffer_end, merge.merge_files[0], argv[2]);
-    //map.execute();
-    for (int i = 1; i < 13; i++) {
+    Map map(buffer_start, buffer_end, merge.merge_files[0], argv[2]);
+    map.execute();
+    /*for (int i = 1; i < 13; i++) {
         std::string s = "string" + std::to_string(i);
         map.output_files.push_back(s);
-    }
+    }*/
 
     MapMerge mapMerge(buffer_start, buffer_end, map.output_files);
     mapMerge.execute();

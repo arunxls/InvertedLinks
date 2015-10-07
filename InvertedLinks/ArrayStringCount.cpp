@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "ArrayStringCount.h"
 #include "FileWriter.h"
+#include <stdlib.h>
 
 ArrayStringCount::ArrayStringCount()
 {
@@ -15,6 +16,7 @@ ArrayStringCount::ArrayStringCount(void *start, void *end)
     this->end_offset = this->start;
 
     this->file_count = 1;
+    this->record_count = 0;
 }
 
 
@@ -140,6 +142,18 @@ StringCount* ArrayStringCount::current()
         this->load();
     }
     return (StringCount*) this->start_offset;
+}
+
+void ArrayStringCount::putFinalRun(StringCount * str)
+{
+    this->record_count++;
+    uint32 n = sprintf(this->start_offset, "%d %s %I32u\r\n",this->record_count, (char*)(str + 1), str->count);
+    uint32 length = n + 1;
+    if (this->start_offset + length > this->end) {
+        this->writeToDisk(this->FW->filename);
+        sprintf(this->start_offset, "%d %s %I32u\r\n", this->record_count, (char*)(str + 1), str->count);
+    }
+    this->start_offset += length;
 }
 
 std::string ArrayStringCount::getNewOutputFile()
