@@ -20,6 +20,7 @@ ArrayStringMap::ArrayStringMap(void *start, void *end, char *filename)
 
 ArrayStringMap::~ArrayStringMap()
 {
+    delete this->FR;
 }
 
 char * ArrayStringMap::next(uint64 hash)

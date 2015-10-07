@@ -16,11 +16,11 @@ public:
     char* start;
     char* end;
 
-    ArrayHashCountReader hashCount;
-    ArrayStringCount stringCountOriginal;
-    ArrayStringCount stringCountSorted;
-    ArrayStringPointer stringPointer;
-    ArrayStringMap stringMap;
+    ArrayHashCountReader* hashCount;
+    ArrayStringCount* stringCountOriginal;
+    ArrayStringCount* stringCountSorted;
+    ArrayStringPointer* stringPointer;
+    ArrayStringMap* stringMap;
 
     std::string merge_file;
     std::deque<std::string> output_files;

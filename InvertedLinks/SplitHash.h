@@ -14,7 +14,7 @@ public:
 
     ArrayGraphReader graph;
     ArrayHashCountReader hashCount;
-    FileReader FR;
+    FileReader *FR;
 
     std::deque<std::string> merge_files;
 

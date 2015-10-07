@@ -11,6 +11,8 @@ public:
     uint64 offset_overall;
     uint32 offset_current_read;
     uint64 size;
+    
+    HANDLE hFile;
 
     void DisplayError(LPTSTR lpszFunction);
 

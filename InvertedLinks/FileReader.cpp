@@ -62,7 +62,8 @@ FileReader::FileReader(char*& filename)
     this->filename = filename;
     this->offset_current_read = 0;
     this->offset_overall = 0;
-    
+ 
+    this->hFile = this->getFileHandle();
     this->size = this->getFileSize();
 }
 
@@ -71,12 +72,14 @@ FileReader::FileReader(std::string& file)
     this->filename = &file[0u];
     this->offset_current_read = 0;
     this->offset_overall = 0;
- 
+
+    this->hFile = this->getFileHandle();
     this->size = this->getFileSize();
 }
 
 FileReader::~FileReader()
 {
+    CloseHandle(this->hFile);
 }
 
 void FileReader::read(LPVOID buffer, uint32 bytesTotransfer, uint32& bytesTrasferred)
@@ -101,10 +104,8 @@ bool FileReader::has_next()
 
 LONGLONG FileReader::getFileSize()
 {
-    HANDLE hFile = this->getFileHandle();
     LARGE_INTEGER size;
-    GetFileSizeEx(hFile, &size);
-    CloseHandle(hFile);
+    GetFileSizeEx(this->hFile, &size);
     return size.QuadPart;
 }
 
@@ -116,23 +117,14 @@ void FileReader::reduceOffset(uint32 reduction)
 
 void FileReader::readFile(char* filename, LPVOID buffer, OVERLAPPED& ol, uint32& dwBytesRead, uint32 bufferSize) {
     printf("Reading %s\n", filename);
-    HANDLE hFile = CreateFile(this->filename,               // file to open
-        GENERIC_READ,          // open for reading
-        0,       // share for reading
-        NULL,                  // default security
-        OPEN_EXISTING,         // existing file only
-        FILE_ATTRIBUTE_NORMAL | FILE_FLAG_OVERLAPPED, // normal file
-        NULL);
-    if (FALSE == ReadFileEx(hFile, (char*) buffer, bufferSize, &ol, FileIOCompletionRoutine))
+    if (FALSE == ReadFileEx(this->hFile, (char*) buffer, bufferSize, &ol, FileIOCompletionRoutine))
     {
         this->DisplayError(TEXT("ReadFile"));
         printf("Terminal failure: Unable to read from file.\n GetLastError=%08x\n", GetLastError());
-        CloseHandle(hFile);
         return;
     }
     SleepEx(5000, TRUE);
     dwBytesRead = g_BytesTransferred;
-    CloseHandle(hFile);
 }
 
 HANDLE FileReader::getFileHandle()
