@@ -16,6 +16,9 @@ public:
     ArrayHashCountReader* hashCount;
     FileReader *FR;
 
+    uint64 total_read;
+    uint64 total_write;
+
     std::deque<std::string> merge_files;
 
     SplitHash(char*, void*, void*);

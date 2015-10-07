@@ -12,6 +12,9 @@ ArrayHashCountReader::ArrayHashCountReader(void * start, void * end)
 
     this->file_count = 1;
     this->FR = NULL;
+
+    this->total_read = 0;
+    this->total_write = 0;
 }
 
 ArrayHashCountReader::~ArrayHashCountReader()
@@ -40,6 +43,7 @@ void ArrayHashCountReader::putSingleFile(HashCount & h)
     if (this->start_offset + sizeof(HashCount) >= this->end) {
         this->compact();
         this->FW->write(this->start, this->start_offset - this->start);
+        this->total_write += this->start_offset - this->start;
         this->start_offset = this->start;
     }
 
@@ -74,6 +78,7 @@ void ArrayHashCountReader::writeToDisk(FileWriter* FH)
 {
     this->output_files.emplace_back(FH->filename);
     FH->write(this->start, this->start_offset - this->start);
+    this->total_write += (this->start_offset - this->start);
     this->start_offset = this->start;
 }
 
@@ -97,7 +102,7 @@ void ArrayHashCountReader::load()
     if (this->has_next()) {
         uint32 bytesTransferred = 0;
         this->FR->read(this->start, this->end - this->start, bytesTransferred);
-
+        this->total_read += bytesTransferred;
         this->start_offset = this->start;
         this->end_offset = this->start_offset + bytesTransferred;
     }

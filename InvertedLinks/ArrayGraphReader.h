@@ -13,6 +13,9 @@ public:
 
     FileReader* FH;
 
+    uint64 total_read;
+    uint64 total_write;
+
     ArrayGraphReader() : start(), end(), start_offset(), end_offset() {};
     ArrayGraphReader(void*, void*, FileReader*);
     ~ArrayGraphReader();

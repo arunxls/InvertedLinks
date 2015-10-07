@@ -14,6 +14,9 @@ public:
     char* start_offset;
     char* end_offset;
 
+    uint64 total_read;
+    uint64 total_write;
+
     std::deque<std::string> output_files;
 
     ArrayHashCountReader() :start(), end(), start_offset(), end_offset(), output_files() {};

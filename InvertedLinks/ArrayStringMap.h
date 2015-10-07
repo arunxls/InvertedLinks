@@ -14,6 +14,9 @@ public:
     char* filename;
     FileReader *FR;
 
+    uint64 total_read;
+    uint64 total_write;
+
     ArrayStringMap();
     ArrayStringMap(void*, void*, char*);
     ~ArrayStringMap();

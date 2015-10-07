@@ -16,6 +16,9 @@ ArrayStringMap::ArrayStringMap(void *start, void *end, char *filename)
 
     this->filename = filename;
     this->FR = new FileReader(this->filename);
+
+    this->total_read = 0;
+    this->total_write = 0;
 }
 
 ArrayStringMap::~ArrayStringMap()
@@ -48,6 +51,7 @@ void ArrayStringMap::load()
     uint32 bytesTransferred = 0;
     this->FR->reduceOffset(this->end_offset - this->start_offset);
     this->FR->read(this->start, this->end - this->start, bytesTransferred);
+    this->total_read += bytesTransferred;
     this->start_offset = this->start;
     this->end_offset = this->start_offset + bytesTransferred;
 }

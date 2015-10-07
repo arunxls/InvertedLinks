@@ -10,6 +10,9 @@ ArrayGraphReader::ArrayGraphReader(void * start, void * end, FileReader* FH)
     this->end_offset = this->start;
 
     this->FH = FH;
+
+    this->total_read = 0;
+    this->total_write = 0;
 }
 
 ArrayGraphReader::~ArrayGraphReader()
@@ -44,7 +47,9 @@ void ArrayGraphReader::load()
 {
     uint32 bytesTransferred = 0;
     this->FH->read(start, end - start, bytesTransferred);
-
+    
+    this->total_read += bytesTransferred;
+    
     if (DEBUG) {
         _tprintf(TEXT("Data read from %s (%d bytes): \n"), this->FH->filename, this->FH->offset_current_read);
     }

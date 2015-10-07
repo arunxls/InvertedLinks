@@ -14,6 +14,9 @@ public:
 
     int file_count;
 
+    uint64 total_read;
+    uint64 total_write;
+
     ArrayStringCount* merge_1;
     ArrayStringCount* merge_2;
     ArrayStringCount* output;

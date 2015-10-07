@@ -18,6 +18,9 @@ public:
     ArrayHashCountReader* read_2;
     ArrayHashCountReader* write_merged;
 
+    uint64 total_read;
+    uint64 total_write;
+
     MergeHash(void*, void*, std::deque<std::string>);
     ~MergeHash();
 

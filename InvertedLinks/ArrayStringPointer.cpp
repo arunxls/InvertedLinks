@@ -13,6 +13,9 @@ ArrayStringPointer::ArrayStringPointer(void *start, void *end)
 
     this->start_offset = this->start;
     this->end_offset = this->start;
+
+    this->total_read = 0;
+    this->total_write = 0;
 }
 
 

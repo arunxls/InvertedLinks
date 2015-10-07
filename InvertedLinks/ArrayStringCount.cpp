@@ -17,6 +17,9 @@ ArrayStringCount::ArrayStringCount(void *start, void *end)
 
     this->file_count = 1;
     this->record_count = 0;
+
+    this->total_read = 0;
+    this->total_write = 0;
 }
 
 
@@ -61,6 +64,7 @@ void ArrayStringCount::load()
     this->FR->reduceOffset(this->end_offset - this->start_offset);
     uint32 bytesTransferred = 0;
     this->FR->read(this->start, this->end - this->start, bytesTransferred);
+    this->total_read += bytesTransferred;
     this->start_offset = this->start;
     this->end_offset = this->start_offset + bytesTransferred;
 }
@@ -93,6 +97,7 @@ void ArrayStringCount::sortCopyWrite()
 void ArrayStringCount::writeToDisk(FileWriter* FW)
 {
     FW->write(this->start, this->start_offset - this->start);
+    this->total_write += (this->start_offset - this->start);
     this->start_offset = this->start;
 }
 

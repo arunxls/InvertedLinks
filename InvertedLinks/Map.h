@@ -22,6 +22,9 @@ public:
     ArrayStringPointer* stringPointer;
     ArrayStringMap* stringMap;
 
+    uint64 total_read;
+    uint64 total_write;
+
     std::string merge_file;
     std::deque<std::string> output_files;
 

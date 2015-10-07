@@ -10,6 +10,9 @@ public:
     StringCount** start_offset;
     StringCount** end_offset;
 
+    uint64 total_read;
+    uint64 total_write;
+
     ArrayStringPointer();
     ArrayStringPointer(void*, void*);
     ~ArrayStringPointer();

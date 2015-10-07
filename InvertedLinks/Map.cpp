@@ -24,6 +24,9 @@ Map::Map(void *start, void *end, std::string merge_file, char* map_file)
 
     this->stringCountOriginal->stringPointer = this->stringPointer;
     this->stringCountOriginal->copy = this->stringCountSorted;
+
+    this->total_read = 0;
+    this->total_write = 0;
 }
 
 Map::~Map()
@@ -38,6 +41,7 @@ Map::~Map()
 void Map::execute()
 {
     FileReader *FR = new FileReader(this->merge_file);
+    printf("Total unique nodes - %I32u\n", FR->size / sizeof(HashCount));
     this->hashCount->setFileReader(FR);
 
     while (this->hashCount->has_next()) {
@@ -50,5 +54,20 @@ void Map::execute()
 
     delete FR;
     DeleteFile(TEXT(this->merge_file.c_str()));
+
+    this->total_read +=
+        this->stringCountOriginal->total_read +
+        this->stringCountSorted->total_read +
+        this->stringPointer->total_read +
+        this->stringMap->total_read +
+        this->hashCount->total_read;
+
+    this->total_write +=
+        this->stringCountOriginal->total_write +
+        this->stringCountSorted->total_write +
+        this->stringPointer->total_write +
+        this->stringMap->total_write +
+        this->hashCount->total_write;
+
     return;
 }

@@ -28,6 +28,9 @@ public:
     FileWriter* FW;
     uint32 record_count;
 
+    uint64 total_read;
+    uint64 total_write;
+
     ArrayStringCount();
     ArrayStringCount(void*, void*);
     ~ArrayStringCount();

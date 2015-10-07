@@ -14,6 +14,9 @@ MergeHash::MergeHash(void *start, void *end, std::deque<std::string> merge_files
     this->write_merged = new ArrayHashCountReader((((this->start + read_buffer + 1) + read_buffer) + 1), end);
 
     this->file_count = merge_files.size() + 1;
+
+    this->total_read = 0;
+    this->total_write = 0;
 }
 
 MergeHash::~MergeHash()
@@ -63,6 +66,9 @@ void MergeHash::execute()
             this->write_merged->compact();
             this->write_merged->writeToDisk(&FW);
             this->merge_files.push_back(str3);
+
+            this->total_read = this->read_1->total_read + this->read_2->total_read + this->write_merged->total_read;
+            this->total_write = this->read_1->total_write + this->read_2->total_write + this->write_merged->total_write;
         }
 
         DeleteFile(TEXT(str1.c_str()));
