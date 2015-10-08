@@ -86,10 +86,9 @@ void ArrayStringCount::sortCopyWrite()
     std::string file = this->getNewOutputFile();
     this->output_files.push_back(file);
     FileWriter FW = FileWriter(file);
-    this->writeToDisk(&FW);
-    //FW.write(this->copy->start, this->copy->start_offset - this->copy->start);
+    this->copy->writeToDisk(&FW);
     
-    //this->start_offset = this->start;
+    this->start_offset = this->start;
     this->copy->start_offset = this->copy->start;
     this->stringPointer->start_offset = this->stringPointer->start;
 }
@@ -163,5 +162,5 @@ void ArrayStringCount::putFinalRun(StringCount * str)
 
 std::string ArrayStringCount::getNewOutputFile()
 {
-    return STRING_OUTPUT_PREFIX + std::to_string(this->file_count++) + STRING_OUTPUT_SUFFIX;;
+    return STRING_OUTPUT_PREFIX + std::to_string(this->file_count++) + STRING_OUTPUT_SUFFIX;
 }
