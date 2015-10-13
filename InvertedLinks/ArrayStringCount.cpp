@@ -152,7 +152,7 @@ void ArrayStringCount::putFinalRun(StringCount * str)
 {
     this->record_count++;
     uint32 n = sprintf(this->start_offset, "%d %s %I32u\r\n",this->record_count, (char*)(str + 1), str->count);
-    uint32 length = n + 1;
+    uint32 length = n;
     if (this->start_offset + length > this->end) {
         this->writeToDisk(this->FW);
         sprintf(this->start_offset, "%d %s %I32u\r\n", this->record_count, (char*)(str + 1), str->count);

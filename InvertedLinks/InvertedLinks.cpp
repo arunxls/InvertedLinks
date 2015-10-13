@@ -69,6 +69,7 @@ void __cdecl _tmain(int argc, TCHAR *argv[])
     printf("\n");
 
     printf("Staring map split phase\n");
+    //files.push_back("merge93");
     std::chrono::high_resolution_clock::time_point b3 = std::chrono::high_resolution_clock::now();
     {
         Map map(buffer_start, buffer_end, files[0], argv[2]);
@@ -84,6 +85,18 @@ void __cdecl _tmain(int argc, TCHAR *argv[])
 
     printf("\n");
 
+    //files.push_back("string1");
+    //files.push_back("string2");
+    //files.push_back("string3");
+    //files.push_back("string4");
+    //files.push_back("string5");
+    //files.push_back("string6");
+    //files.push_back("string7");
+    //files.push_back("string8");
+    //files.push_back("string9");
+    //files.push_back("string10");
+    //files.push_back("string11");
+    //files.push_back("string12");
     printf("Starting map merge phase\n");
     std::chrono::high_resolution_clock::time_point b4 = std::chrono::high_resolution_clock::now();
     {
