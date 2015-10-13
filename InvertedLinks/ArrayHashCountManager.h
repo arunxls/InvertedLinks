@@ -4,6 +4,8 @@
 #include "FileWriter.h"
 #include "ArrayHashCountReader.h"
 
+#define MAX_SPLIT_THREADS 4
+
 class ArrayHashCountManager
 {
 public:
@@ -12,6 +14,7 @@ public:
 
     char* start_offset;
     char* end_offset;
+    std::deque<std::string> output_files;
 
     uint64 total_read;
     uint64 total_write;
@@ -23,9 +26,12 @@ public:
     ~ArrayHashCountManager();
 
     void putSplitFiles(HashCount&);
-    void sort();
-    void compact();
     void writeToDisk(FileWriter* FH);
     std::string getNewOutputFile();
+    uint64 getTotalRead();
+    uint64 getTotalWrite();
+
+private:
+    uint32 file_count;
 };
 

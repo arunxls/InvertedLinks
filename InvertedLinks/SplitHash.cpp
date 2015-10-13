@@ -8,7 +8,6 @@ SplitHash::SplitHash(char *filename, void *buffer_start, void *buffer_end) :
     this->FR = new FileReader(filename);
     this->graph = new ArrayGraphReader(this->buffer_start, this->buffer_start + READBUFFER*_1_MB, FR);
     uint32 offset = ((uint32)std::ceil( ( (float) READBUFFER*_1_MB) / ( (float) sizeof(HashCount) ) )) * sizeof(HashCount) ;
-    //this->hashCount = new ArrayHashCountReader(this->buffer_start + offset, this->buffer_end);
     this->hashCountManager = new ArrayHashCountManager(this->buffer_start + offset, this->buffer_end);
     
     this->total_read = 0;
@@ -24,20 +23,17 @@ SplitHash::~SplitHash()
 
 void SplitHash::execute()
 {
-    int count = 0;
     while (this->graph->has_next()) {
         HashCount h = this->graph->next();
-        this->hashCount->putSplitFiles(h);
+        this->hashCountManager->putSplitFiles(h);
     }
 
-    this->hashCount->sort();
-    this->hashCount->compact();
-    std::string file_name = this->hashCount->getNewOutputFile();
+    std::string file_name = this->hashCountManager->getNewOutputFile();
     FileWriter FW = FileWriter(file_name);
-    this->hashCount->writeToDisk(&FW);
+    this->hashCountManager->writeToDisk(&FW);
 
-    this->merge_files = this->hashCount->output_files;
+    this->merge_files = this->hashCountManager->output_files;
 
-    this->total_read += this->graph->total_read + this->hashCount->total_read;
-    this->total_write += this->graph->total_write + this->hashCount->total_write;
+    this->total_read += this->graph->total_read + this->hashCountManager->getTotalRead();
+    this->total_write += this->graph->total_write + this->hashCountManager->getTotalWrite();
 }

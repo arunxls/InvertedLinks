@@ -14,7 +14,6 @@ public:
     char* buffer_end;
 
     ArrayGraphReader* graph;
-    ArrayHashCountReader* hashCount;
     FileReader *FR;
     ArrayHashCountManager* hashCountManager;
 
