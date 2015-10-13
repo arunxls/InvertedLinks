@@ -10,8 +10,8 @@ MergeHash::MergeHash(void *start, void *end, std::deque<std::string> merge_files
     
     uint32 read_buffer = ((MERGESIZE * _1_MB) / sizeof(HashCount))*sizeof(HashCount);
     this->read_1 = new ArrayHashCountReader(this->start, this->start + read_buffer);
-    this->read_2 = new ArrayHashCountReader(this->start + read_buffer + 1, (this->start + read_buffer + 1) + read_buffer);
-    this->write_merged = new ArrayHashCountReader((((this->start + read_buffer + 1) + read_buffer) + 1), end);
+    this->read_2 = new ArrayHashCountReader(this->start + read_buffer, this->start + 2*read_buffer);
+    this->write_merged = new ArrayHashCountReader(this->start + 2 * read_buffer, end);
 
     this->file_count = merge_files.size() + 1;
 

@@ -146,6 +146,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ArrayGraphReader.h" />
+    <ClInclude Include="ArrayHashCountManager.h" />
     <ClInclude Include="ArrayHashCountReader.h" />
     <ClInclude Include="ArrayStringCount.h" />
     <ClInclude Include="ArrayStringMap.h" />
@@ -157,12 +158,14 @@
     <ClInclude Include="Map.h" />
     <ClInclude Include="MapMerge.h" />
     <ClInclude Include="MergeHash.h" />
+    <ClInclude Include="Sort.h" />
     <ClInclude Include="SplitHash.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ArrayGraphReader.cpp" />
+    <ClCompile Include="ArrayHashCountManager.cpp" />
     <ClCompile Include="ArrayHashCountReader.cpp" />
     <ClCompile Include="ArrayStringCount.cpp" />
     <ClCompile Include="ArrayStringMap.cpp" />
@@ -173,6 +176,7 @@
     <ClCompile Include="Map.cpp" />
     <ClCompile Include="MapMerge.cpp" />
     <ClCompile Include="MergeHash.cpp" />
+    <ClCompile Include="Sort.cpp" />
     <ClCompile Include="SplitHash.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

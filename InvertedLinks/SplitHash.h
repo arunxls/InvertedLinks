@@ -1,6 +1,7 @@
 #pragma once
 #include "ArrayGraphReader.h"
 #include "ArrayHashCountReader.h"
+#include "ArrayHashCountManager.h"
 #include <vector>
 #include <string>
 
@@ -15,6 +16,7 @@ public:
     ArrayGraphReader* graph;
     ArrayHashCountReader* hashCount;
     FileReader *FR;
+    ArrayHashCountManager* hashCountManager;
 
     uint64 total_read;
     uint64 total_write;

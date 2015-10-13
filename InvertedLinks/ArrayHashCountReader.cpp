@@ -1,15 +1,21 @@
 #include "stdafx.h"
 #include "ArrayHashCountReader.h"
 #include <algorithm>
+#include "Sort.h"
 
 ArrayHashCountReader::ArrayHashCountReader(void * start, void * end)
 {
-    this->start = (char*)start;
-    this->end = (char*)end;
+    this->init(start, end);
 
-    this->start_offset = this->start;
-    this->end_offset = this->start;
+    this->file_count = 1;
+    this->FR = NULL;
 
+    this->total_read = 0;
+    this->total_write = 0;
+}
+
+ArrayHashCountReader::ArrayHashCountReader()
+{
     this->file_count = 1;
     this->FR = NULL;
 
@@ -130,4 +136,13 @@ HashCount& ArrayHashCountReader::current()
 std::string ArrayHashCountReader::getNewOutputFile()
 {
     return OUTPUT_PREFIX + std::to_string(this->file_count++) + OUTPUT_SUFFIX;
+}
+
+void ArrayHashCountReader::init(void *start, void *end)
+{
+    this->start = (char*)start;
+    this->end = (char*)end;
+
+    this->start_offset = this->start;
+    this->end_offset = this->start;
 }

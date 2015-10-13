@@ -19,7 +19,7 @@ public:
 
     std::deque<std::string> output_files;
 
-    ArrayHashCountReader() :start(), end(), start_offset(), end_offset(), output_files() {};
+    ArrayHashCountReader();
     ArrayHashCountReader(void*, void*);
     ~ArrayHashCountReader();
 
@@ -35,6 +35,7 @@ public:
     void setFileReader(FileReader*);
     void setFileWriter(FileWriter*);
     std::string getNewOutputFile();
+    void init(void*, void*);
 
 private:
     uint32 file_count;

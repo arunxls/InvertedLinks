@@ -31,6 +31,11 @@ public:
         return hash < a.hash;
     }
 
+    bool operator>(const HashCount& a) const
+    {
+        return hash > a.hash;
+    }
+
     bool operator==(const HashCount& a) const
     {
         return hash == a.hash;

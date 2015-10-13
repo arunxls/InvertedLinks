@@ -6,10 +6,11 @@ SplitHash::SplitHash(char *filename, void *buffer_start, void *buffer_end) :
     buffer_start((char*)buffer_start), buffer_end((char*)buffer_end) 
 {
     this->FR = new FileReader(filename);
-    this->graph = new ArrayGraphReader(buffer_start, (char*)buffer_start + READBUFFER*_1_MB, FR);
+    this->graph = new ArrayGraphReader(this->buffer_start, this->buffer_start + READBUFFER*_1_MB, FR);
     uint32 offset = ((uint32)std::ceil( ( (float) READBUFFER*_1_MB) / ( (float) sizeof(HashCount) ) )) * sizeof(HashCount) ;
-    this->hashCount = new ArrayHashCountReader((char*)buffer_start + offset, buffer_end);
-
+    //this->hashCount = new ArrayHashCountReader(this->buffer_start + offset, this->buffer_end);
+    this->hashCountManager = new ArrayHashCountManager(this->buffer_start + offset, this->buffer_end);
+    
     this->total_read = 0;
     this->total_write = 0;
 }
@@ -18,7 +19,7 @@ SplitHash::~SplitHash()
 {
     delete this->FR;
     delete this->graph;
-    delete this->hashCount;
+    delete this->hashCountManager;
 }
 
 void SplitHash::execute()
