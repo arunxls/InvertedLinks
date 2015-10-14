@@ -8,7 +8,6 @@
 #include <csignal>
 #include <cstdlib>
 
-DWORD g_BytesTransferred = 0;
 VOID CALLBACK FileIOCompletionRoutine(
     __in  DWORD dwErrorCode,
     __in  DWORD dwNumberOfBytesTransfered,
@@ -19,7 +18,6 @@ VOID CALLBACK FileIOCompletionRoutine(
         _tprintf(TEXT("Error code:\t%x\n"), dwErrorCode);
         _tprintf(TEXT("Number of bytes:\t%I32u\n"), dwNumberOfBytesTransfered);
     }
-    g_BytesTransferred = dwNumberOfBytesTransfered;
 }
 
 void FileReader::DisplayError(LPTSTR lpszFunction)
@@ -95,6 +93,7 @@ void FileReader::read(LPVOID buffer, uint32 bytesTotransfer, uint32& bytesTrasfe
 
     ol.OffsetHigh = (uint32)(offset_overall >> 32);
     ol.Offset = (uint32)offset_overall;
+    ol.hEvent = *(HANDLE*) this;
 
     this->readFile(filename, buffer, ol, bytesTrasferred, bytesTotransfer);
     
@@ -134,15 +133,15 @@ void FileReader::readFile(char* filename, LPVOID buffer, OVERLAPPED& ol, uint32&
         printf("Terminal failure: Unable to read from file.\n GetLastError=%08x\n", GetLastError());
         return;
     }
-    SleepEx(5000, TRUE);
-    dwBytesRead = g_BytesTransferred;
+    SleepEx(50000, TRUE);
+    dwBytesRead = ol.InternalHigh;
 }
 
 HANDLE FileReader::getFileHandle()
 {
     HANDLE hFile = CreateFile(this->filename,               // file to open
         GENERIC_READ,          // open for reading
-        0,       // share for reading
+        0,       // exclusive reading
         NULL,                  // default security
         OPEN_EXISTING,         // existing file only
         FILE_ATTRIBUTE_NORMAL | FILE_FLAG_OVERLAPPED, // normal file
@@ -150,8 +149,17 @@ HANDLE FileReader::getFileHandle()
 
     if (hFile == INVALID_HANDLE_VALUE)
     {
-        _tprintf("Terminal failure: unable to open file \"%s\" for read.\n", this->filename);
-        std::abort();
+        hFile = CreateFile(this->filename,               // file to open
+            GENERIC_READ,          // open for reading
+            FILE_SHARE_READ,       // share for reading
+            NULL,                  // default security
+            OPEN_EXISTING,         // existing file only
+            FILE_ATTRIBUTE_NORMAL | FILE_FLAG_OVERLAPPED, // normal file
+            NULL);
+        if (DEBUG && hFile == INVALID_HANDLE_VALUE) {
+            _tprintf("Terminal failure: unable to open file \"%s\" for read.\n", this->filename);
+            std::abort();
+        }
     }
 
     return hFile;

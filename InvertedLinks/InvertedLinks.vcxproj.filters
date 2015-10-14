@@ -69,7 +69,7 @@
     <ClInclude Include="ArrayHashCountManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="MapMergeManager.h">
+    <ClInclude Include="MergeHashManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -119,7 +119,7 @@
     <ClCompile Include="ArrayHashCountManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="MapMergeManager.cpp">
+    <ClCompile Include="MergeHashManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -12,10 +12,13 @@
 #include "ArrayHashCountReader.h"
 #include "Map.h"
 #include "MapMerge.h"
+#include "MergeHashManager.h"
+#include <psapi.h>
 
-#define BUFFERSIZE 500
+#define BUFFERSIZE 496
 
-void __cdecl _tmain(int argc, TCHAR *argv[])
+//no except
+void __cdecl _tmain(int argc, TCHAR *argv[]) noexcept
 {
     if (argc != 3)
     {
@@ -52,10 +55,15 @@ void __cdecl _tmain(int argc, TCHAR *argv[])
 
     printf("\n");
 
+    //for (int i = 1; i < 48; i++) {
+    //    std::string temp = "split" + std::to_string(i);
+    //    files.push_back(temp);
+    //}
+
     printf("Starting merge phase\n");
     std::chrono::high_resolution_clock::time_point b2 = std::chrono::high_resolution_clock::now();
     {
-        MergeHash merge(buffer_start, buffer_end, files);
+        MergeHashManager merge(buffer_start, buffer_end, files);
         merge.execute();
         files = merge.merge_files;
         printf("Total IO: read - %.2f GB; write - %.2f GB\n", (float)merge.total_read / _1_GB, (float)merge.total_write / _1_GB);
@@ -69,7 +77,6 @@ void __cdecl _tmain(int argc, TCHAR *argv[])
     printf("\n");
 
     printf("Staring map split phase\n");
-    //files.push_back("merge93");
     std::chrono::high_resolution_clock::time_point b3 = std::chrono::high_resolution_clock::now();
     {
         Map map(buffer_start, buffer_end, files[0], argv[2]);
@@ -85,18 +92,6 @@ void __cdecl _tmain(int argc, TCHAR *argv[])
 
     printf("\n");
 
-    //files.push_back("string1");
-    //files.push_back("string2");
-    //files.push_back("string3");
-    //files.push_back("string4");
-    //files.push_back("string5");
-    //files.push_back("string6");
-    //files.push_back("string7");
-    //files.push_back("string8");
-    //files.push_back("string9");
-    //files.push_back("string10");
-    //files.push_back("string11");
-    //files.push_back("string12");
     printf("Starting map merge phase\n");
     std::chrono::high_resolution_clock::time_point b4 = std::chrono::high_resolution_clock::now();
     {
@@ -111,10 +106,19 @@ void __cdecl _tmain(int argc, TCHAR *argv[])
     printf("Ending map merge phase\n");
 
     printf("\n");
-
+    
     printf("Overall stats - RunTime: %lld seconds; Total read %.2f GB; Total write %.2f GB\n",
         std::chrono::duration_cast<std::chrono::seconds>(e4 - b1).count(),
         (float)total_read/_1_GB, (float)total_write/_1_GB);
+
+    {
+        PROCESS_MEMORY_COUNTERS pp;
+        HANDLE hProcess = OpenProcess(PROCESS_QUERY_INFORMATION |
+            PROCESS_VM_READ,
+            FALSE, GetCurrentProcessId());
+        GetProcessMemoryInfo(hProcess, &pp, sizeof(PROCESS_MEMORY_COUNTERS));
+        printf("Peaking working set : %.2f MB\n", (double)pp.PeakWorkingSetSize / _1_MB);
+    }
 
     printf("DONE!\n");
     return;

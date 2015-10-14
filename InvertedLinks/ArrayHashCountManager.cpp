@@ -1,6 +1,9 @@
 #include "stdafx.h"
 #include "ArrayHashCountManager.h"
 
+HANDLE ghSortSemaphore;
+HANDLE ghWriteSemaphore;
+
 ArrayHashCountManager::ArrayHashCountManager(void *start, void *end)
 {
     this->file_count = 1;
@@ -10,7 +13,10 @@ ArrayHashCountManager::ArrayHashCountManager(void *start, void *end)
     this->start_offset = this->start;
     this->end_offset = this->start;
     
-    uint32 splitSize = (this->end - this->start) / 4;
+    ghSortSemaphore = CreateSemaphore(NULL,0,MAX_SPLIT_THREADS,NULL);
+    ghWriteSemaphore = CreateSemaphore(NULL, 0, MAX_SPLIT_THREADS, NULL);
+
+    uint32 splitSize = (this->end - this->start) / MAX_SPLIT_THREADS;
     this->hashCount = new ArrayHashCountReader[MAX_SPLIT_THREADS];
     for (int i = 0; i < MAX_SPLIT_THREADS; i++) {
         ArrayHashCountReader* tmp = this->hashCount + i;
@@ -19,6 +25,7 @@ ArrayHashCountManager::ArrayHashCountManager(void *start, void *end)
 
     this->total_read = 0;
     this->total_write = 0;
+    this->init_threads();
 }
 
 ArrayHashCountManager::ArrayHashCountManager()
@@ -29,6 +36,11 @@ ArrayHashCountManager::ArrayHashCountManager()
 ArrayHashCountManager::~ArrayHashCountManager()
 {
     delete[] this->hashCount;
+    CloseHandle(ghSortSemaphore);
+    CloseHandle(ghWriteSemaphore);
+    for (int i = 0; i < MAX_SPLIT_THREADS; ++i) {
+        CloseHandle(this->hThreadArray[i]);
+    }
 }
 
 void ArrayHashCountManager::putSplitFiles(HashCount &h)
@@ -44,11 +56,64 @@ void ArrayHashCountManager::putSplitFiles(HashCount &h)
     tmp->putSplitFiles(h);
 }
 
+void DisplayError(LPTSTR lpszFunction)
+// Routine Description:
+// Retrieve and output the system error message for the last-error code
+{
+    LPVOID lpMsgBuf;
+    LPVOID lpDisplayBuf;
+    DWORD dw = GetLastError();
+
+    FormatMessage(
+        FORMAT_MESSAGE_ALLOCATE_BUFFER |
+        FORMAT_MESSAGE_FROM_SYSTEM |
+        FORMAT_MESSAGE_IGNORE_INSERTS,
+        NULL,
+        dw,
+        MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
+        (LPTSTR)&lpMsgBuf,
+        0,
+        NULL);
+
+    lpDisplayBuf =
+        (LPVOID)LocalAlloc(LMEM_ZEROINIT,
+            (lstrlen((LPCTSTR)lpMsgBuf)
+                + lstrlen((LPCTSTR)lpszFunction)
+                + 40) // account for format string
+            * sizeof(TCHAR));
+
+    if (FAILED(StringCchPrintf((LPTSTR)lpDisplayBuf,
+        LocalSize(lpDisplayBuf) / sizeof(TCHAR),
+        TEXT("%s failed with error code %d as follows:\n%s"),
+        lpszFunction,
+        dw,
+        lpMsgBuf)))
+    {
+        printf("FATAL ERROR: Unable to output error code.\n");
+    }
+
+    _tprintf(TEXT("ERROR: %s\n"), (LPCTSTR)lpDisplayBuf);
+
+    LocalFree(lpMsgBuf);
+    LocalFree(lpDisplayBuf);
+}
+
 DWORD WINAPI sortAndCompact(LPVOID data)
 {
-    ArrayHashCountReader* hCount = (ArrayHashCountReader*)data;
-    hCount->sort();
-    hCount->compact();
+    while (1) {
+        WaitForSingleObject(ghSortSemaphore, INFINITE);
+        WaitForSingleObject(ghWriteSemaphore, INFINITE);
+
+        ArrayHashCountReader* hCount = (ArrayHashCountReader*)data;
+        hCount->sort();
+        hCount->compact();
+        if (!ReleaseSemaphore(ghWriteSemaphore,1,NULL))
+        {
+            DisplayError(TEXT("SetEvent"));
+            return 1;
+        }
+    }
+
     return 0;
 }
 
@@ -58,27 +123,21 @@ void ArrayHashCountManager::writeToDisk(FileWriter * FH)
     HANDLE  hThreadArray[MAX_SPLIT_THREADS];
 
     for (int i = 0; i < MAX_SPLIT_THREADS; ++i) {
-        hThreadArray[i] = CreateThread(
-            NULL,                   // default security attributes
-            0,                      // use default stack size  
-            sortAndCompact,   // thread function name
-            (this->hashCount + i),  // argument to thread function 
-            0,                      // use default creation flags 
-            &dwThreadIdArray[i]);   // returns the thread identifier 
-
-        if (hThreadArray[i] == NULL)
+        if (!ReleaseSemaphore(ghSortSemaphore, 1, NULL))
         {
-            //ErrorHandler(TEXT("CreateThread"));
-            ExitProcess(3);
+            DisplayError(TEXT("SetEvent"));
+        }
+
+        if (!ReleaseSemaphore(ghWriteSemaphore, 1, NULL))
+        {
+            DisplayError(TEXT("SetEvent"));
         }
     }
 
-    WaitForMultipleObjects(MAX_SPLIT_THREADS, hThreadArray, TRUE, INFINITE);
-
-    // Close all thread handles.
-    for (int i = 0; i<MAX_SPLIT_THREADS; ++i)
+    Sleep(1000);
+    for (int i = 0; i < MAX_SPLIT_THREADS; ++i)
     {
-        CloseHandle(hThreadArray[i]);
+        WaitForSingleObject(ghWriteSemaphore, INFINITE);
     }
 
     for (int i = 0; i < MAX_SPLIT_THREADS; ++i)
@@ -112,4 +171,26 @@ uint64 ArrayHashCountManager::getTotalWrite()
         this->total_write += (this->hashCount + i)->total_write;
     }
     return this->total_write;
+}
+
+void ArrayHashCountManager::init_threads()
+{
+    DWORD   dwThreadIdArray[MAX_SPLIT_THREADS];
+    for (int i = 0; i < MAX_SPLIT_THREADS; ++i) {
+        this->hThreadArray[i] = CreateThread(
+            NULL,                   // default security attributes
+            0,                      // use default stack size  
+            sortAndCompact,         // thread function name
+            (this->hashCount + i),  // argument to thread function 
+            0,                      // use default creation flags 
+            &dwThreadIdArray[i]);   // returns the thread identifier 
+
+        //SetThreadPriority(this->hThreadArray[i], THREAD_PRIORITY_HIGHEST);
+
+        if (hThreadArray[i] == NULL)
+        {
+            //ErrorHandler(TEXT("CreateThread"));
+            ExitProcess(3);
+        }
+    }
 }

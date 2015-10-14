@@ -4,19 +4,28 @@
 
 MergeHash::MergeHash(void *start, void *end, std::deque<std::string> merge_files)
 {
-    this->start = (char*) start;
-    this->end = (char*) end;
+    this->init(start, end, merge_files);
+}
+
+void MergeHash::init(void *start, void *end, std::deque<std::string> merge_files)
+{
+    this->start = (char*)start;
+    this->end = (char*)end;
     this->merge_files = merge_files;
-    
+
     uint32 read_buffer = ((MERGESIZE * _1_MB) / sizeof(HashCount))*sizeof(HashCount);
     this->read_1 = new ArrayHashCountReader(this->start, this->start + read_buffer);
-    this->read_2 = new ArrayHashCountReader(this->start + read_buffer, this->start + 2*read_buffer);
+    this->read_2 = new ArrayHashCountReader(this->start + read_buffer, this->start + 2 * read_buffer);
     this->write_merged = new ArrayHashCountReader(this->start + 2 * read_buffer, end);
 
     this->file_count = merge_files.size() + 1;
 
     this->total_read = 0;
     this->total_write = 0;
+}
+
+MergeHash::MergeHash()
+{
 }
 
 MergeHash::~MergeHash()
@@ -80,5 +89,5 @@ void MergeHash::execute()
 
 std::string MergeHash::getNewOutputFile()
 {
-    return OUTPUT_PREFIX + std::to_string(this->file_count++) + OUTPUT_SUFFIX;
+    return MERGE_OUTPUT_PREFIX + std::to_string(this->file_count++) + MERGE_OUTPUT_SUFFIX;
 }

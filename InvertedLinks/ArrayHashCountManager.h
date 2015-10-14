@@ -32,6 +32,8 @@ public:
     uint64 getTotalWrite();
 
 private:
+    HANDLE  hThreadArray[MAX_SPLIT_THREADS];
     uint32 file_count;
+    void init_threads();
 };
 
