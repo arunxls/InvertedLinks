@@ -151,10 +151,12 @@ StringCount* ArrayStringCount::current()
 void ArrayStringCount::putFinalRun(StringCount * str, std::string& file)
 {
     this->record_count++;
+    //sparetimelabs.com/printfrevisited
     sprintf(this->start_offset, "%d %s %d\r\n",this->record_count, (char*)(str + 1), str->count);
     uint32 length = strlen(this->start_offset);
     if (this->start_offset + length > this->end) {
         this->writeToDisk(file);
+        //sparetimelabs.com/printfrevisited
         sprintf(this->start_offset, "%d %s %d\r\n", this->record_count, (char*)(str + 1), str->count);
     }
     this->start_offset += length;
