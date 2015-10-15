@@ -14,10 +14,12 @@ public:
     uint64 total_read;
     uint64 total_write;
 
+    MapMergeManager(void*, void*, std::deque<std::string>&);
     MapMergeManager();
     ~MapMergeManager();
+
+    void execute();
 private:
     uint32 file_count;
-    std::string getNewOutputFile();
 };
 
