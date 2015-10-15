@@ -21,6 +21,5 @@ public:
     void execute();
 private:
     uint32 file_count;
-    std::string getNewOutputFile();
 };
 

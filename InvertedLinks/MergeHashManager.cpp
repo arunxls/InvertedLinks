@@ -90,8 +90,3 @@ void MergeHashManager::execute()
     this->total_read += merge.total_read;
     this->total_write += merge.total_write;
 }
-
-std::string MergeHashManager::getNewOutputFile()
-{
-    return std::string();
-}
