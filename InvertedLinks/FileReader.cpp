@@ -127,7 +127,8 @@ void FileReader::readFile(char* filename, LPVOID buffer, OVERLAPPED& ol, uint32&
         printf("Reading %s\n", filename);
     }
 
-    if (FALSE == ReadFileEx(this->hFile, (char*) buffer, bufferSize, &ol, FileIOCompletionRoutine))
+    bool flag = ReadFileEx(this->hFile, (char*)buffer, bufferSize, &ol, FileIOCompletionRoutine);
+    if (DEBUG && !flag)
     {
         this->DisplayError(TEXT("ReadFile"));
         printf("Terminal failure: Unable to read from file.\n GetLastError=%08x\n", GetLastError());

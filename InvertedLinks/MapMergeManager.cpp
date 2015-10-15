@@ -43,7 +43,7 @@ void MapMergeManager::execute()
                 tmp_files.emplace_back(this->merge_files.front());
                 this->merge_files.pop_front();
             }
-            (merge + i)->init(this->start + i*offset, this->start + (i + 1)*offset, tmp_files);
+            (merge + i)->init(this->start + i*offset, this->start + (i + 1)*offset, std::move(tmp_files));
             (merge + i)->file_count = i * (prev_size);
             prev_size = tmp_files.size();
         }

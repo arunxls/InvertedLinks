@@ -122,12 +122,14 @@ void ArrayHashCountManager::writeToDisk(std::string& file)
     HANDLE  hThreadArray[MAX_SPLIT_THREADS];
 
     for (int i = 0; i < MAX_SPLIT_THREADS; ++i) {
-        if (!ReleaseSemaphore(ghSortSemaphore, 1, NULL))
+        bool flag = ReleaseSemaphore(ghSortSemaphore, 1, NULL);
+        if (DEBUG && !flag)
         {
             DisplayError(TEXT("SetEvent"));
         }
 
-        if (!ReleaseSemaphore(ghWriteSemaphore, 1, NULL))
+        flag = ReleaseSemaphore(ghWriteSemaphore, 1, NULL);
+        if (DEBUG && !flag)
         {
             DisplayError(TEXT("SetEvent"));
         }
@@ -186,7 +188,7 @@ void ArrayHashCountManager::init_threads()
 
         //SetThreadPriority(this->hThreadArray[i], THREAD_PRIORITY_HIGHEST);
 
-        if (hThreadArray[i] == NULL)
+        if (DEBUG && hThreadArray[i] == NULL)
         {
             //ErrorHandler(TEXT("CreateThread"));
             ExitProcess(3);

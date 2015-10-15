@@ -75,14 +75,14 @@ void FileWriter::write(void * start, uint32 bytesToWrite)
         &dwBytesWritten, // number of bytes that were written
         NULL);            // no overlapped structure
 
-    if (FALSE == bErrorFlag)
+    if (DEBUG && FALSE == bErrorFlag)
     {
         DisplayError(TEXT("WriteFile"));
         printf("Terminal failure: Unable to write to file.\n");
     }
     else
     {
-        if (dwBytesWritten != bytesToWrite)
+        if (DEBUG && dwBytesWritten != bytesToWrite)
         {
             // This is an error because a synchronous write that results in
             // success (WriteFile returns TRUE) should write all data as
@@ -122,7 +122,7 @@ HANDLE FileWriter::getFileHandle()
             NULL);
     }
 
-    if (hFile == INVALID_HANDLE_VALUE)
+    if (DEBUG && hFile == INVALID_HANDLE_VALUE)
     {
         this->DisplayError(TEXT("CreateFile"));
         _tprintf(TEXT("Terminal failure: Unable to open file \"%s\" for write.\n"), filename);

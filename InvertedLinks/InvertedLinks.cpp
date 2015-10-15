@@ -54,11 +54,6 @@ void __cdecl _tmain(int argc, TCHAR *argv[]) noexcept
 
     printf("\n");
 
-    //for (int i = 1; i < 48; i++) {
-    //    std::string temp = "split" + std::to_string(i);
-    //    files.push_back(temp);
-    //}
-
     printf("Starting merge phase\n");
     std::chrono::high_resolution_clock::time_point b2 = std::chrono::high_resolution_clock::now();
     {
@@ -91,11 +86,6 @@ void __cdecl _tmain(int argc, TCHAR *argv[]) noexcept
 
     printf("\n");
     
-    //for (int i = 1; i < 13; i++) {
-    //    std::string temp = "string" + std::to_string(i);
-    //    files.push_back(temp);
-    //}
-
     printf("Starting map merge phase\n");
     std::chrono::high_resolution_clock::time_point b4 = std::chrono::high_resolution_clock::now();
     {

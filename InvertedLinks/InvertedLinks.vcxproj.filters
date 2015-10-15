@@ -129,8 +129,4 @@
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
-  <ItemGroup>
-    <None Include="sprintf\config.h.in" />
-    <None Include="sprintf\defs.h.in" />
-  </ItemGroup>
 </Project>
