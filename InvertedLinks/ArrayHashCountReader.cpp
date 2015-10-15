@@ -5,7 +5,9 @@
 
 ArrayHashCountReader::ArrayHashCountReader(void * start, void * end)
 {
-    this->init(start, end);
+    //Pass initial count 0 to all threads.
+    //Master can change this through the init method
+    this->init(start, end, 0);
 
     this->file_count = 1;
     this->FR = NULL;
@@ -137,8 +139,9 @@ std::string ArrayHashCountReader::getNewOutputFile()
     return OUTPUT_PREFIX + std::to_string(this->file_count++) + OUTPUT_SUFFIX;
 }
 
-void ArrayHashCountReader::init(void *start, void *end)
+void ArrayHashCountReader::init(void *start, void *end, int thread)
 {
+    this->thread_count = thread;
     this->start = (char*)start;
     this->end = (char*)end;
 

@@ -34,9 +34,10 @@ public:
     void load();
     void setFileReader(FileReader*);
     std::string getNewOutputFile();
-    void init(void*, void*);
+    void init(void*, void*, int);
 
 private:
+    int thread_count;
     uint32 file_count;
     FileReader* FR;
 };

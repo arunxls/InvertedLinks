@@ -20,7 +20,7 @@ ArrayHashCountManager::ArrayHashCountManager(void *start, void *end)
     this->hashCount = new ArrayHashCountReader[MAX_SPLIT_THREADS];
     for (int i = 0; i < MAX_SPLIT_THREADS; i++) {
         ArrayHashCountReader* tmp = this->hashCount + i;
-        tmp->init(this->start + (i)*splitSize, this->start + (i + 1)*splitSize);
+        tmp->init(this->start + (i)*splitSize, this->start + (i + 1)*splitSize, i);
     }
 
     this->total_read = 0;
@@ -146,8 +146,6 @@ void ArrayHashCountManager::writeToDisk(std::string& file)
         (this->hashCount + i)->writeToDisk(file);
     }
 }
-
-
 
 std::string ArrayHashCountManager::getNewOutputFile()
 {
