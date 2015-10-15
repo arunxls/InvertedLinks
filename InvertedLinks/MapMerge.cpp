@@ -37,9 +37,6 @@ void MapMerge::execute()
 
             std::string str3 = this->getNewOutputFile();
 
-            FileWriter FW(str3);
-            this->output->setFileWriter(&FW);
-
             while (this->merge_1->has_next() || this->merge_2->has_next()) {
                 StringCount* h;
                 if (this->merge_1->has_next() && this->merge_2->has_next()) {
@@ -56,17 +53,18 @@ void MapMerge::execute()
                 }
 
 
-                this->output->putSingleFile(h);
+                this->output->putSingleFile(h, str3);
             }
 
-            this->output->writeToDisk(this->output->FW);
+            this->output->writeToDisk(str3);
             this->merge_files.push_back(str3);
 
             this->total_read = this->merge_1->total_read + this->merge_2->total_read + this->output->total_read;
             this->total_write = this->merge_1->total_write + this->merge_2->total_write + this->output->total_write;
         }
-        /*DeleteFile(TEXT(str1.c_str()));
-        DeleteFile(TEXT(str2.c_str()));*/
+
+        DeleteFile(TEXT(str1.c_str()));
+        DeleteFile(TEXT(str2.c_str()));
     }
 
     return;
@@ -88,9 +86,6 @@ void MapMerge::executeFinal()
 
         std::string str3 = "output.txt";
 
-        FileWriter FW(str3);
-        this->output->setFileWriter(&FW);
-
         while (this->merge_1->has_next() || this->merge_2->has_next()) {
             StringCount* h;
             if (this->merge_1->has_next() && this->merge_2->has_next()) {
@@ -106,17 +101,19 @@ void MapMerge::executeFinal()
                 h = this->merge_2->next();
             }
 
-            this->output->putFinalRun(h);
+            this->output->putFinalRun(h, str3);
         }
 
-        this->output->writeToDisk(this->output->FW);
+        this->output->writeToDisk(str3);
         this->merge_files.push_back(str3);
 
         this->total_read = this->merge_1->total_read + this->merge_2->total_read + this->output->total_read;
         this->total_write = this->merge_1->total_write + this->merge_2->total_write + this->output->total_write;
     }
-    /*DeleteFile(TEXT(str1.c_str()));
-    DeleteFile(TEXT(str2.c_str()));*/
+
+    DeleteFile(TEXT(str1.c_str()));
+    DeleteFile(TEXT(str2.c_str()));
+    
     return;
 }
 

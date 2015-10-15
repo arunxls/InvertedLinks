@@ -25,7 +25,6 @@ public:
     std::deque<std::string> output_files;
 
     FileReader* FR;
-    FileWriter* FW;
     uint32 record_count;
 
     uint64 total_read;
@@ -38,14 +37,13 @@ public:
     void put(char*, uint32);
     void put(StringCount*);
     void sortCopyWrite();
-    void writeToDisk(FileWriter*);
-    void putSingleFile(StringCount*);
-    void setFileWriter(FileWriter*);
+    void writeToDisk(std::string&);
+    void putSingleFile(StringCount*, std::string&);
     void setFileReader(FileReader*);
     StringCount* next();
     bool has_next();
     StringCount* current();
-    void putFinalRun(StringCount*);
+    void putFinalRun(StringCount*, std::string&);
 
 private:
     void load();
