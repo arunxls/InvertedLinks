@@ -29,8 +29,7 @@ void SplitHash::execute()
     }
 
     std::string file_name = this->hashCountManager->getNewOutputFile();
-    FileWriter FW = FileWriter(file_name);
-    this->hashCountManager->writeToDisk(&FW);
+    this->hashCountManager->writeToDisk(file_name);
 
     this->merge_files = this->hashCountManager->output_files;
 

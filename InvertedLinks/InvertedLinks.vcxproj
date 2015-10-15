@@ -159,7 +159,7 @@
     <ClInclude Include="MapMerge.h" />
     <ClInclude Include="MergeHashManager.h" />
     <ClInclude Include="MergeHash.h" />
-    <ClInclude Include="Sort.h" />
+    <ClInclude Include="printf.h" />
     <ClInclude Include="SplitHash.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
@@ -178,7 +178,7 @@
     <ClCompile Include="MapMerge.cpp" />
     <ClCompile Include="MergeHashManager.cpp" />
     <ClCompile Include="MergeHash.cpp" />
-    <ClCompile Include="Sort.cpp" />
+    <ClCompile Include="printf.cpp" />
     <ClCompile Include="SplitHash.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
@@ -186,6 +186,10 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="sprintf\config.h.in" />
+    <None Include="sprintf\defs.h.in" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

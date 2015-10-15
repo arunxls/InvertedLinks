@@ -76,8 +76,6 @@ void __cdecl _tmain(int argc, TCHAR *argv[]) noexcept
 
     printf("\n");
 
-    return;
-
     printf("Staring map split phase\n");
     std::chrono::high_resolution_clock::time_point b3 = std::chrono::high_resolution_clock::now();
     {
@@ -93,7 +91,7 @@ void __cdecl _tmain(int argc, TCHAR *argv[]) noexcept
     printf("Ending map split phase\n");
 
     printf("\n");
-
+    
     printf("Starting map merge phase\n");
     std::chrono::high_resolution_clock::time_point b4 = std::chrono::high_resolution_clock::now();
     {

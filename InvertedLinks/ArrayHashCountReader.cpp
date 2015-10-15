@@ -1,7 +1,6 @@
 #include "stdafx.h"
 #include "ArrayHashCountReader.h"
 #include <algorithm>
-#include "Sort.h"
 #include "MergeHashManager.h"
 
 ArrayHashCountReader::ArrayHashCountReader(void * start, void * end)
@@ -34,8 +33,7 @@ void ArrayHashCountReader::putSplitFiles(HashCount& h)
         this->sort();
         this->compact();
         std::string file_name = this->getNewOutputFile();
-        FileWriter FW = FileWriter(file_name);
-        this->writeToDisk(&FW);
+        this->writeToDisk(file_name);
     }
 
     HashCount* foo = (HashCount*) this->start_offset;
@@ -45,11 +43,11 @@ void ArrayHashCountReader::putSplitFiles(HashCount& h)
     this->start_offset += sizeof(HashCount);
 }
 
-void ArrayHashCountReader::putSingleFile(HashCount & h)
+void ArrayHashCountReader::putSingleFile(HashCount & h, std::string& file)
 {
     if (this->start_offset + sizeof(HashCount) >= this->end) {
         this->compact();
-        this->FW->write(this->start, this->start_offset - this->start);
+        this->writeToDisk(file);
         this->total_write += this->start_offset - this->start;
         this->start_offset = this->start;
     }
@@ -81,13 +79,16 @@ void ArrayHashCountReader::compact()
     this->start_offset = (char*) (insert_p + 1);
 }
 
-void ArrayHashCountReader::writeToDisk(FileWriter* FH)
+void ArrayHashCountReader::writeToDisk(std::string& file)
 {
     WaitForSingleObject(gHashWriteSemaphone, INFINITE);
-    this->output_files.emplace_back(FH->filename);
-    FH->write(this->start, this->start_offset - this->start);
-    this->total_write += (this->start_offset - this->start);
-    this->start_offset = this->start;
+    {
+        FileWriter FH = FileWriter(file);
+        this->output_files.emplace_back(FH.filename);
+        FH.write(this->start, this->start_offset - this->start);
+        this->total_write += (this->start_offset - this->start);
+        this->start_offset = this->start;
+    }
     ReleaseSemaphore(gHashWriteSemaphone, 1, NULL);
 }
 
@@ -120,11 +121,6 @@ void ArrayHashCountReader::load()
 void ArrayHashCountReader::setFileReader(FileReader * FR)
 {
     this->FR = FR;
-}
-
-void ArrayHashCountReader::setFileWriter(FileWriter * FW)
-{
-    this->FW = FW;
 }
 
 HashCount& ArrayHashCountReader::current()

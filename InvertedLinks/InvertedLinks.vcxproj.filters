@@ -21,13 +21,7 @@
     <ClInclude Include="stdafx.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="targetver.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="FileReader.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include_types.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ArrayHashCountReader.h">
@@ -63,13 +57,19 @@
     <ClInclude Include="MapMerge.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Sort.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="ArrayHashCountManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="MergeHashManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include_types.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="targetver.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="printf.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -113,14 +113,18 @@
     <ClCompile Include="MapMerge.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Sort.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="ArrayHashCountManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="MergeHashManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="printf.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="sprintf\config.h.in" />
+    <None Include="sprintf\defs.h.in" />
   </ItemGroup>
 </Project>

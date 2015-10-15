@@ -51,8 +51,6 @@ void MergeHash::execute()
             this->read_2->setFileReader(&FR2);
 
             std::string str3 = this->getNewOutputFile();
-            FileWriter FW(str3);
-            this->write_merged->setFileWriter(&FW);
 
             while (this->read_1->has_next() || this->read_2->has_next()) {
                 HashCount h;
@@ -69,11 +67,11 @@ void MergeHash::execute()
                     h = this->read_2->next();
                 }
 
-                this->write_merged->putSingleFile(h);
+                this->write_merged->putSingleFile(h, str3);
             }
 
             this->write_merged->compact();
-            this->write_merged->writeToDisk(&FW);
+            this->write_merged->writeToDisk(str3);
             this->merge_files.push_back(str3);
 
             this->total_read = this->read_1->total_read + this->read_2->total_read + this->write_merged->total_read;

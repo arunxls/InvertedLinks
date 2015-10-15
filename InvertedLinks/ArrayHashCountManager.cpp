@@ -49,9 +49,7 @@ void ArrayHashCountManager::putSplitFiles(HashCount &h)
     ArrayHashCountReader* tmp = (this->hashCount + key);
     if (tmp->start_offset + sizeof(HashCount) > tmp->end) {
         std::string file = this->getNewOutputFile();
-        FileWriter* FW = new FileWriter(file);
-        this->writeToDisk(FW);
-        delete FW;
+        this->writeToDisk(file);
     }
     tmp->putSplitFiles(h);
 }
@@ -118,7 +116,7 @@ DWORD WINAPI sortAndCompact(LPVOID data)
     return 0;
 }
 
-void ArrayHashCountManager::writeToDisk(FileWriter * FH)
+void ArrayHashCountManager::writeToDisk(std::string& file)
 {
     DWORD   dwThreadIdArray[MAX_SPLIT_THREADS];
     HANDLE  hThreadArray[MAX_SPLIT_THREADS];
@@ -135,7 +133,7 @@ void ArrayHashCountManager::writeToDisk(FileWriter * FH)
         }
     }
 
-    Sleep(1000);
+    Sleep(500);
     for (int i = 0; i < MAX_SPLIT_THREADS; ++i)
     {
         WaitForSingleObject(ghWriteSemaphore, INFINITE);
@@ -143,7 +141,7 @@ void ArrayHashCountManager::writeToDisk(FileWriter * FH)
 
     for (int i = 0; i < MAX_SPLIT_THREADS; ++i)
     {
-        (this->hashCount + i)->writeToDisk(FH);
+        (this->hashCount + i)->writeToDisk(file);
     }
 }
 

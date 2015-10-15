@@ -26,7 +26,7 @@ public:
     ~ArrayHashCountManager();
 
     void putSplitFiles(HashCount&);
-    void writeToDisk(FileWriter* FH);
+    void writeToDisk(std::string&);
     std::string getNewOutputFile();
     uint64 getTotalRead();
     uint64 getTotalWrite();

@@ -24,22 +24,20 @@ public:
     ~ArrayHashCountReader();
 
     void putSplitFiles(HashCount&);
-    void putSingleFile(HashCount&);
+    void putSingleFile(HashCount&, std::string&);
     void sort();
     void compact();
-    void writeToDisk(FileWriter* FH);
+    void writeToDisk(std::string& file_name);
     bool has_next();
     HashCount& current();
     HashCount next();
     void load();
     void setFileReader(FileReader*);
-    void setFileWriter(FileWriter*);
     std::string getNewOutputFile();
     void init(void*, void*);
 
 private:
     uint32 file_count;
     FileReader* FR;
-    FileWriter* FW;
 };
 

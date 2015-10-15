@@ -1,7 +1,8 @@
 #include "stdafx.h"
 #include "ArrayStringCount.h"
 #include "FileWriter.h"
-#include <stdlib.h>
+//#include <stdlib.h>
+#include "printf.h"
 
 ArrayStringCount::ArrayStringCount()
 {
@@ -151,8 +152,8 @@ StringCount* ArrayStringCount::current()
 void ArrayStringCount::putFinalRun(StringCount * str)
 {
     this->record_count++;
-    uint32 n = sprintf(this->start_offset, "%d %s %I32u\r\n",this->record_count, (char*)(str + 1), str->count);
-    uint32 length = n;
+    sprintf(this->start_offset, "%d %s %d\r\n",this->record_count, (char*)(str + 1), str->count);
+    uint32 length = strlen(this->start_offset);
     if (this->start_offset + length > this->end) {
         this->writeToDisk(this->FW);
         sprintf(this->start_offset, "%d %s %I32u\r\n", this->record_count, (char*)(str + 1), str->count);
