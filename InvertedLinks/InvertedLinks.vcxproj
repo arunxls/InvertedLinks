@@ -157,6 +157,7 @@
     <ClInclude Include="InvertedLinks.h" />
     <ClInclude Include="Map.h" />
     <ClInclude Include="MapMerge.h" />
+    <ClInclude Include="MapMergeManager.h" />
     <ClInclude Include="MergeHashManager.h" />
     <ClInclude Include="MergeHash.h" />
     <ClInclude Include="printf.h" />
@@ -176,6 +177,7 @@
     <ClCompile Include="InvertedLinks.cpp" />
     <ClCompile Include="Map.cpp" />
     <ClCompile Include="MapMerge.cpp" />
+    <ClCompile Include="MapMergeManager.cpp" />
     <ClCompile Include="MergeHashManager.cpp" />
     <ClCompile Include="MergeHash.cpp" />
     <ClCompile Include="printf.cpp" />
