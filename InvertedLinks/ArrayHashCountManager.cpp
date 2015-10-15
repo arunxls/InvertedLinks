@@ -107,7 +107,8 @@ DWORD WINAPI sortAndCompact(LPVOID data)
         ArrayHashCountReader* hCount = (ArrayHashCountReader*)data;
         hCount->sort();
         hCount->compact();
-        if (!ReleaseSemaphore(ghWriteSemaphore,1,NULL))
+        bool flag = ReleaseSemaphore(ghWriteSemaphore, 1, NULL);
+        if (DEBUG && !flag)
         {
             DisplayError(TEXT("SetEvent"));
             return 1;

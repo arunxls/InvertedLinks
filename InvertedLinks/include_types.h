@@ -1,7 +1,7 @@
 #pragma once
 
 #include <string>
-
+#include <windows.h>
 #define _HAS_ITERATOR_DEBUGGING 0
 #define _1_MB 1000000
 #define _1_GB 1000000000
@@ -13,6 +13,7 @@ typedef unsigned short   ushort;
 
 const std::string OUTPUT_PREFIX = "split";
 const std::string OUTPUT_SUFFIX = "";
+const HANDLE gHashWriteSemaphone = CreateSemaphore(NULL, 1, 1, NULL);;
 
 #pragma pack(push,1) // change struct packing to 1 byte
 class HeaderGraph {

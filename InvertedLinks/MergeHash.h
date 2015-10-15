@@ -5,7 +5,7 @@
 #include <string>
 #include "ArrayHashCountReader.h"
 
-#define MERGESIZE 32
+#define MERGESIZE 36
 
 const std::string MERGE_OUTPUT_PREFIX = "merge";
 const std::string MERGE_OUTPUT_SUFFIX = "";

@@ -2,6 +2,7 @@
 #include "ArrayHashCountReader.h"
 #include <algorithm>
 #include "Sort.h"
+#include "MergeHashManager.h"
 
 ArrayHashCountReader::ArrayHashCountReader(void * start, void * end)
 {
@@ -82,10 +83,12 @@ void ArrayHashCountReader::compact()
 
 void ArrayHashCountReader::writeToDisk(FileWriter* FH)
 {
+    WaitForSingleObject(gHashWriteSemaphone, INFINITE);
     this->output_files.emplace_back(FH->filename);
     FH->write(this->start, this->start_offset - this->start);
     this->total_write += (this->start_offset - this->start);
     this->start_offset = this->start;
+    ReleaseSemaphore(gHashWriteSemaphone, 1, NULL);
 }
 
 bool ArrayHashCountReader::has_next()
